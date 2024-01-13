@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { site } from "@/siteConfig";
 import "@/styles/globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 import { Inter } from "next/font/google";
 
@@ -12,7 +13,7 @@ const inter = Inter({
 export const metadata = {
   title: site.name,
   description: site.description,
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/notebook.svg" }],
 };
 
 export default function RootLayout({
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className={`font-sans ${inter.variable}`} suppressHydrationWarning>
         <Navbar />
         {children}
+        <Toaster />
       </body>
     </html>
   );
