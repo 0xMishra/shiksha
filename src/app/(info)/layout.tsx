@@ -1,4 +1,3 @@
-import { Footer } from "@/components/Footer";
 import InfoSidebar from "./_components/InfoSidebar";
 
 const InfoLayout = ({ children }: { children: React.ReactNode }) => {
@@ -6,7 +5,6 @@ const InfoLayout = ({ children }: { children: React.ReactNode }) => {
     <div>
       <InfoSidebar />
       {children}
-      <Footer />
     </div>
   );
 };

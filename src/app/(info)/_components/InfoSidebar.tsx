@@ -1,28 +1,31 @@
-import { Logo } from "@/components/Logo";
-import { Compass, LayoutDashboard, Mail } from "lucide-react";
+"use client";
+import { cn } from "@/lib/utils";
+import { Compass, LayoutDashboard, SquarePen } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const links = [
   {
     id: 1,
     link: "/",
     icon: <Compass />,
-    text: "Browse",
+    text: "Browse course",
   },
   {
     id: 2,
-    link: "/my-courses",
+    link: "/dashboard",
     icon: <LayoutDashboard />,
     text: "Dashboard",
   },
   {
     id: 3,
-    link: "/mail",
-    icon: <Mail />,
-    text: "Mail",
+    link: "/courses/create",
+    icon: <SquarePen />,
+    text: "Create courses",
   },
 ];
 const InfoSidebar = () => {
+  const pathname = usePathname();
   return (
     <div
       className={
@@ -31,11 +34,18 @@ const InfoSidebar = () => {
     >
       <div className="mt-8 flex flex-col items-center justify-center py-2 ">
         {links.map((l) => {
+          let extraClasses = "";
+          if (l.link === pathname) {
+            extraClasses = "bg-lime-900 text-white";
+          }
           return (
             <Link
               key={l.id}
               href={l.link}
-              className="my-4 flex w-[100%] items-center justify-center space-x-2 border-[1px] border-solid border-gray-800 py-2 transition-all hover:bg-lime-900  hover:text-white"
+              className={cn(
+                "my-4 flex w-[100%] items-center justify-center space-x-2 border-[1px] border-solid border-gray-800 py-2 transition-all hover:bg-lime-900  hover:text-white",
+                extraClasses,
+              )}
             >
               <div>{l.icon}</div>
               <p>{l.text}</p>

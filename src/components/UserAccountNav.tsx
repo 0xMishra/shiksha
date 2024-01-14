@@ -11,10 +11,11 @@ import { LogOut, Notebook } from "lucide-react";
 import { type Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Icons } from "./Icons";
 
 export const UserAccountNav = ({ session }: { session: Session }) => {
+  const router = useRouter();
   const signOutWithGoogle = async () => {
     try {
       await signOut();
@@ -47,8 +48,11 @@ export const UserAccountNav = ({ session }: { session: Session }) => {
             {session.user.email}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-lg font-semibold text-gray-600">
-            <Link href={"/my-courses"} className="flex items-center ">
+          <DropdownMenuItem
+            className="text-lg font-semibold text-gray-600"
+            onClick={() => router.push("/dashboard")}
+          >
+            <div className="flex items-center ">
               <Notebook className="text-gray-600" />
               <div
                 onClick={() => signOutWithGoogle()}
@@ -56,7 +60,7 @@ export const UserAccountNav = ({ session }: { session: Session }) => {
               >
                 my courses
               </div>
-            </Link>
+            </div>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => signOutWithGoogle()}

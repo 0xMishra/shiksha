@@ -1,10 +1,9 @@
 import { getServerAuthSession } from "@/server/auth";
-import Link from "next/link";
+import { AuthButton } from "./AuthButton";
 import { Logo } from "./Logo";
+import { NavbarMenu } from "./NavbarMenu";
 import { Searchbar } from "./Searchbar";
 import { UserAccountNav } from "./UserAccountNav";
-import { Button } from "./ui/button";
-import { NavbarMenu } from "./NavbarMenu";
 
 export const Navbar = async () => {
   const session = await getServerAuthSession();
@@ -20,13 +19,7 @@ export const Navbar = async () => {
             <Searchbar />
           </div>
           <div>
-            {session ? (
-              <UserAccountNav session={session} />
-            ) : (
-              <Button variant={"primary"} size={"sm"} asChild>
-                <Link href={"/sign-in"}>login</Link>
-              </Button>
-            )}
+            {session ? <UserAccountNav session={session} /> : <AuthButton />}
           </div>
         </div>
       </div>
