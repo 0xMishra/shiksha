@@ -1,11 +1,9 @@
 import { cn } from "@/lib/utils";
 import { Compass, LayoutDashboard, SquarePen, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 
 const links = [
   {
@@ -81,7 +79,7 @@ export const Sidebar = ({
               href={l.link}
               onClick={onClose}
               className={cn(
-                "my-4 flex w-[100%] items-center justify-center space-x-2 border-[1px] border-solid border-gray-800 py-2 transition-all hover:bg-lime-900  hover:text-white",
+                "my-4 flex w-[100%] items-center justify-center space-x-2 border-[1px] border-solid border-gray-800 py-2 transition-all hover:bg-lime-900/90  hover:text-white",
                 extraClasses,
               )}
             >
