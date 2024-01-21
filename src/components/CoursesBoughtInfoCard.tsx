@@ -3,15 +3,15 @@ import { db } from "@/server/db";
 import { type Course } from "@prisma/client";
 import { CourseInfoCard } from "./CourseInfoCard";
 
-export const CoursesSoldInfoCard = async ({ id }: Course) => {
+export const CoursesBoughtInfoCard = async ({ id }: Course) => {
   const session = await getServerAuthSession();
 
-  const userWithCoursesSold = await db.user.findUnique({
+  const userWithCoursesBought = await db.user.findUnique({
     where: {
       id: session?.user.id,
     },
     include: {
-      coursesCreated: {
+      coursesBought: {
         where: {
           id: id,
         },
@@ -21,8 +21,8 @@ export const CoursesSoldInfoCard = async ({ id }: Course) => {
 
   return (
     <>
-      {userWithCoursesSold?.coursesCreated
-        ? userWithCoursesSold?.coursesCreated.map((course) => (
+      {userWithCoursesBought?.coursesBought
+        ? userWithCoursesBought.coursesBought.map((course) => (
             <CourseInfoCard key={course.id} {...course} />
           ))
         : ""}

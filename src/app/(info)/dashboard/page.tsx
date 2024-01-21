@@ -1,4 +1,4 @@
-import { CourseInfoCard } from "@/components/CourseInfoCard";
+import { CoursesBoughtInfoCard } from "@/components/CoursesBoughtInfoCard";
 import { CoursesSoldInfoCard } from "@/components/CoursesSoldInfoCard";
 import {
   Card,
@@ -6,34 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { db } from "@/server/db";
 import { CheckCircle, Clock4, DollarSign, NotebookPen } from "lucide-react";
 
-const coursesBought = [
-  {
-    id: "1",
-    image:
-      "https://d33g7sdvsfd029.cloudfront.net/teachcode/admin/COURSE/cover/1699610005757WhatsApp-Image-2023-11-10-at-3.16.18-PM.jpeg",
-    title: "Fullstack twitter Clone",
-    creator: "kundan mishra",
-    numberOfChapters: 22,
-    price: "Free",
-    isBoughtByUser: true,
-    completetionRate: 0,
-  },
-];
-const coursesSold = [
-  {
-    id: "1",
-    image:
-      "https://d33g7sdvsfd029.cloudfront.net/teachcode/admin/COURSE/cover/1699610005757WhatsApp-Image-2023-11-10-at-3.16.18-PM.jpeg",
-    title: "Full stack web dev",
-    numberOfChapters: 22,
-    price: 100,
-    numberOfBuyers: 12,
-  },
-];
+const DashboardPage = async () => {
+  const courses = await db.course.findMany();
 
-const DashboardPage = () => {
   return (
     <div className="mt-8 flex  max-w-[1000px] flex-col items-center justify-center md:ml-64">
       <h1 className="mb-4 text-3xl font-semibold">Courses bought</h1>
@@ -63,8 +41,8 @@ const DashboardPage = () => {
       <section className="flex w-[99%] flex-col items-center justify-center">
         <div className="mb-2 mt-6 md:ml-64">
           <div className="flex flex-wrap justify-center gap-3">
-            {coursesBought.map((course) => (
-              <CourseInfoCard key={course.id} {...course} />
+            {courses.map((course) => (
+              <CoursesBoughtInfoCard key={course.id} {...course} />
             ))}
           </div>
         </div>
@@ -97,7 +75,7 @@ const DashboardPage = () => {
       <section className="flex w-[99%] flex-col items-center justify-center">
         <div className="mb-2 mt-6 md:ml-64">
           <div className="flex flex-wrap justify-center gap-3">
-            {coursesSold.map((course) => (
+            {courses.map((course) => (
               <CoursesSoldInfoCard key={course.id} {...course} />
             ))}
           </div>
