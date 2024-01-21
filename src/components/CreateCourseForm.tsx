@@ -37,9 +37,10 @@ export const CreateCourseForm = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
+
   return (
     <div className="flex h-[100%] w-[100%] items-start justify-center">
-      <Card className="w-[90%] max-w-[700px]">
+      <Card className="w-[100%] max-w-[700px]">
         <CardHeader>
           <CardTitle>Create Course</CardTitle>
           <CardDescription>provide course info.</CardDescription>

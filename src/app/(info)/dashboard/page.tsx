@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CheckCircle, Clock4 } from "lucide-react";
+import { CheckCircle, Clock4, DollarSign, NotebookPen } from "lucide-react";
 
 const coursesBought = [
   {
@@ -35,9 +35,11 @@ const coursesSold = [
 
 const DashboardPage = () => {
   return (
-    <>
-      <section className="fex w-[100vw] flex-col items-center justify-center gap-2 md:flex-row">
-        <div className="flex items-center justify-center gap-2">
+    <div className="mt-8 flex  max-w-[1000px] flex-col items-center justify-center md:ml-64">
+      <h1 className="mb-4 text-3xl font-semibold">Courses bought</h1>
+
+      <section className="flex w-[100%] flex-col items-center justify-center gap-2 p-2 md:flex-row md:justify-between">
+        <div className="flex flex-1 items-center justify-center gap-2">
           <Card className="flex items-center justify-center gap-2 p-2">
             <Clock4 size={40} />
             <CardHeader>
@@ -68,21 +70,25 @@ const DashboardPage = () => {
         </div>
       </section>
 
-      <section className="fex flex-col items-center justify-center gap-2 md:flex-row">
-        <div className="flex items-center justify-center gap-2">
+      <h1 className="mb-4 mt-32 text-3xl font-semibold">Courses sold</h1>
+
+      <section className="flex w-[100%] flex-col items-center justify-center gap-2 p-2 md:flex-row md:justify-between">
+        <div className="flex flex-1 items-center justify-center gap-2">
           <Card className="flex items-center justify-center gap-2 p-2">
+            <NotebookPen size={40} />
             <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
+              <CardTitle>Courses sold</CardTitle>
+              <CardDescription>{5} courses</CardDescription>
             </CardHeader>
           </Card>
         </div>
 
         <div className="flex items-center justify-center gap-2">
           <Card className="flex items-center justify-center gap-2 p-2">
+            <DollarSign size={40} />
             <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
+              <CardTitle>Total revenue</CardTitle>
+              <CardDescription>{1000} USD</CardDescription>
             </CardHeader>
           </Card>
         </div>
@@ -97,7 +103,7 @@ const DashboardPage = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 
