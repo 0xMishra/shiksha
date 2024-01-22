@@ -1,4 +1,5 @@
 "use client";
+
 import { createCourse } from "@/actions";
 import {
   Card,
@@ -21,8 +22,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
-import { type ChangeEvent, useState } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -31,6 +33,8 @@ const formSchema = z.object({
 
 export const CreateCourseForm = () => {
   const [imageData, setImageData] = useState<string>("");
+  const formRef = useRef<HTMLFormElement>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -65,7 +69,17 @@ export const CreateCourseForm = () => {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form action={createCourse} className="space-y-8">
+            <form
+              ref={formRef}
+              action={async (formData: FormData) => {
+                setIsLoading(true);
+                await createCourse(formData);
+                formRef.current?.reset();
+                setIsLoading(false);
+                setImageData("");
+              }}
+              className="space-y-8"
+            >
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
@@ -80,7 +94,7 @@ export const CreateCourseForm = () => {
               <FormItem>
                 <FormLabel>Price</FormLabel>
                 <FormControl>
-                  <Input required placeholder="name of course" name="price" />
+                  <Input required placeholder="price of course" name="price" />
                 </FormControl>
                 <FormDescription>
                   This is the price of the course
@@ -89,7 +103,7 @@ export const CreateCourseForm = () => {
               </FormItem>
 
               <FormItem>
-                <FormLabel>Price</FormLabel>
+                <FormLabel>Banner</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="name of course"
@@ -127,9 +141,15 @@ export const CreateCourseForm = () => {
                 </div>
               )}
 
-              <Button type="submit" variant={"primary"}>
-                Submit
-              </Button>
+              {isLoading ? (
+                <Button disabled variant={"primary"}>
+                  <Loader2 />
+                </Button>
+              ) : (
+                <Button type="submit" variant={"primary"}>
+                  Submit
+                </Button>
+              )}
             </form>
           </Form>
         </CardContent>

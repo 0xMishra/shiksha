@@ -144,7 +144,7 @@ export const CourseInfoCard = async ({
             />
             <CardTitle>{name}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="w-[100%]">
             <p>{numberOfChapters} chapters</p>
             <p className="mt-4">Price: {price} USD</p>
             <p className="font-semibold">

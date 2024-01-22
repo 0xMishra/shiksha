@@ -37,7 +37,8 @@ const InfoSidebar = () => {
           let extraClasses = "";
           if (
             l.link === pathname ||
-            (l.text === "Browse course" && pathname.includes("explore/"))
+            (l.text === "Browse course" && pathname.includes("explore/")) ||
+            (l.text === "Create courses" && pathname.includes("add-chapters"))
           ) {
             extraClasses = "bg-lime-900 text-white";
           }

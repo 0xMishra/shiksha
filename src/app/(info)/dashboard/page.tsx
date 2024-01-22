@@ -72,7 +72,7 @@ const DashboardPage = async () => {
         </div>
       </section>
 
-      <section className="flex w-[99%] flex-col items-center justify-center">
+      <section className="flex  w-[99%] flex-col items-center justify-center">
         <div className="mb-2 mt-6 md:ml-64">
           <div className="flex flex-wrap justify-center gap-3">
             {courses.map((course) => (

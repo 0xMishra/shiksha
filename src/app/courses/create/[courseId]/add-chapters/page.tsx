@@ -1,4 +1,4 @@
-const CourseIdPage = async ({
+const AddChaptersPage = ({
   params,
 }: {
   params: {
@@ -8,4 +8,4 @@ const CourseIdPage = async ({
   return <div>{params.courseId}</div>;
 };
 
-export default CourseIdPage;
+export default AddChaptersPage;
