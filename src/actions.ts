@@ -27,3 +27,23 @@ export async function createCourse(formData: FormData) {
     console.log(error);
   }
 }
+
+export async function addChaptersToCourse(formData: FormData) {
+  try {
+    const name = formData.get("name") as string;
+    const desc = formData.get("desc") as string;
+    const videoUrl = formData.get("videoUrl") as string;
+    const courseId = formData.get("courseId") as string;
+
+    await db.chapter.create({
+      data: {
+        name: name,
+        description: desc,
+        videoUrl: videoUrl,
+        courseId: courseId,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import InfoSidebar from "../(info)/_components/InfoSidebar";
+import InfoSidebar from "../../../(info)/_components/InfoSidebar";
 
 const CourseLayout = ({ children }: { children: React.ReactNode }) => {
   return (
