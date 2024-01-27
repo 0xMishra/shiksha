@@ -5,7 +5,7 @@ import Link from "next/link";
 export const Logo = () => {
   return (
     <Link href="/">
-      <div className=" flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <Image
           src={"/notebook.svg"}
           alt="logo"

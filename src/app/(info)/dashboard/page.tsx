@@ -31,8 +31,8 @@ const DashboardPage = async () => {
         <h1 className="mb-4 text-3xl font-semibold">Courses bought</h1>
 
         <section className="flex w-[100%] flex-col items-center justify-center gap-2 p-2 md:flex-row md:gap-0 lg:justify-between lg:gap-2">
-          <div className="flex w-[50%] items-center justify-center ">
-            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 md:w-[80%] lg:w-[100%] ">
+          <div className="flex w-[100%] items-center justify-center md:w-[50%] ">
+            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 shadow-md md:w-[80%] lg:w-[100%] ">
               <Clock4 size={30} />
               <CardHeader>
                 <CardTitle>In progress</CardTitle>
@@ -41,8 +41,8 @@ const DashboardPage = async () => {
             </Card>
           </div>
 
-          <div className="flex w-[50%] items-center justify-center ">
-            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 md:w-[80%] lg:w-[100%] ">
+          <div className="mt-12 flex w-[100%] items-center justify-center md:mt-0 md:w-[50%] ">
+            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 shadow-md md:w-[80%] lg:w-[100%] ">
               <CheckCircle size={30} />
               <CardHeader>
                 <CardTitle>Completed</CardTitle>
@@ -52,9 +52,9 @@ const DashboardPage = async () => {
           </div>
         </section>
 
-        <section className="flex  w-[100%] flex-col items-center justify-center md:pr-64 xl:pr-0">
-          <div className="mb-2 mt-6 w-[100%] md:ml-64">
-            <div className="flex w-[100%] flex-wrap items-center justify-center gap-3">
+        <section className="my-8 flex w-[100%] flex-col items-center justify-center">
+          <div className="mb-2 mt-6 w-[100%] ">
+            <div className="flex w-[100%] flex-wrap items-center justify-center gap-12 ">
               {courses.map((course) => (
                 <CoursesBoughtInfoCard key={course.id} {...course} />
               ))}
@@ -65,8 +65,8 @@ const DashboardPage = async () => {
         <h1 className="mb-4 mt-32 text-3xl font-semibold">Courses sold</h1>
 
         <section className="flex w-[100%] flex-col items-center justify-center gap-2 p-2 md:flex-row md:gap-0 lg:justify-between lg:gap-2">
-          <div className="flex w-[50%] items-center justify-center ">
-            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 md:w-[80%] lg:w-[100%] ">
+          <div className="flex w-[100%] items-center justify-center md:w-[50%] ">
+            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 shadow-md md:w-[80%] lg:w-[100%] ">
               <NotebookPen size={30} />
               <CardHeader>
                 <CardTitle>Courses sold</CardTitle>
@@ -77,8 +77,8 @@ const DashboardPage = async () => {
             </Card>
           </div>
 
-          <div className="flex w-[50%] items-center justify-center ">
-            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 md:w-[80%] lg:w-[100%] ">
+          <div className="mt-12 flex w-[100%] items-center justify-center md:mt-0 md:w-[50%] ">
+            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 shadow-md md:w-[80%] lg:w-[100%] ">
               <DollarSign size={30} />
               <CardHeader>
                 <CardTitle>Total revenue</CardTitle>
@@ -88,9 +88,9 @@ const DashboardPage = async () => {
           </div>
         </section>
 
-        <section className="flex w-[100%] flex-col items-center justify-center md:pr-64 xl:pr-0">
-          <div className="mb-2 mt-6 w-[100%] md:ml-64">
-            <div className="flex w-[100%] flex-wrap items-center justify-center gap-3 border-2 border-solid border-black">
+        <section className="my-8 flex w-[100%] flex-col items-center justify-center ">
+          <div className="mb-2 mt-6 w-[100%] ">
+            <div className="flex w-[100%] flex-wrap items-center justify-center gap-12 ">
               {courses.map((course) => (
                 <CoursesSoldInfoCard key={course.id} {...course} />
               ))}

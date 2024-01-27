@@ -34,7 +34,7 @@ const CourseIdPage = async ({
   }
 
   return (
-    <section className="relative mt-4 flex w-[100vw] items-center justify-center p-2 md:ml-64 md:pr-72 ">
+    <section className="mt-4 flex w-[100vw] items-center justify-center p-2 md:ml-64 md:pr-72 ">
       <div className="flex w-[100%] items-center justify-between gap-2">
         <h2 className="text-2xl font-semibold">{course?.name}</h2>
         {isUserCourseCreator ? (

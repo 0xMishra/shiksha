@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { getServerAuthSession } from "./server/auth";
 import { db } from "./server/db";
 
@@ -23,6 +24,8 @@ export async function createCourse(formData: FormData) {
         },
       },
     });
+
+    revalidatePath("/");
   } catch (error) {
     console.log(error);
   }
@@ -43,6 +46,8 @@ export async function addChaptersToCourse(formData: FormData) {
         courseId: courseId,
       },
     });
+
+    revalidatePath(`courses/explore/${courseId}`);
   } catch (error) {
     console.log(error);
   }

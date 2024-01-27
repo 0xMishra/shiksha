@@ -19,6 +19,7 @@ export const CourseInfoCard = async ({
   numberOfChapters,
   price,
 }: Course) => {
+  const maxLength = 17;
   const session = await getServerAuthSession();
 
   const creator = await db.user.findFirst({
@@ -75,7 +76,7 @@ export const CourseInfoCard = async ({
 
     return (
       <Link href={`/courses/explore/${id}`} className="">
-        <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center md:max-w-[300px]">
+        <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center shadow-md md:max-w-[300px]">
           <CardHeader className="w-[100%]">
             <Image
               src={banner}
@@ -90,7 +91,11 @@ export const CourseInfoCard = async ({
               }}
               priority
             />
-            <CardTitle>{name}</CardTitle>
+            <CardTitle>
+              {name.length > maxLength
+                ? name.substring(0, maxLength) + "..."
+                : name}
+            </CardTitle>
             <CardDescription>{creator?.name}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -127,7 +132,7 @@ export const CourseInfoCard = async ({
 
     return (
       <Link href={`/courses/explore/${id}`} className="">
-        <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center md:max-w-[300px]">
+        <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center shadow-md md:max-w-[300px]">
           <CardHeader className="w-[100%]">
             <Image
               src={banner}
@@ -142,7 +147,11 @@ export const CourseInfoCard = async ({
               }}
               priority
             />
-            <CardTitle>{name}</CardTitle>
+            <CardTitle>
+              {name.length > maxLength
+                ? name.substring(0, maxLength) + "..."
+                : name}
+            </CardTitle>
           </CardHeader>
           <CardContent className="w-[100%]">
             <p>{numberOfChapters} chapters</p>
@@ -158,7 +167,7 @@ export const CourseInfoCard = async ({
 
   return (
     <Link href={`/courses/explore/${id}`} className="">
-      <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center md:max-w-[300px]">
+      <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center shadow-md md:max-w-[300px]">
         <CardHeader className="w-[100%]">
           <Image
             src={banner}
@@ -173,7 +182,11 @@ export const CourseInfoCard = async ({
             }}
             priority
           />
-          <CardTitle>{name}</CardTitle>
+          <CardTitle>
+            {name.length > maxLength
+              ? name.substring(0, maxLength) + "..."
+              : name}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <p>{numberOfChapters} chapters</p>

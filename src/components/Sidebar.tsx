@@ -69,7 +69,8 @@ export const Sidebar = ({
           if (
             l.link === pathname ||
             (l.text === "Browse courses" &&
-              pathname.includes("/courses/explore/"))
+              pathname.includes("/courses/explore/")) ||
+            (l.text === "Create courses" && pathname.includes("/add-chapters"))
           ) {
             extraClasses = "bg-lime-900 text-white";
           }

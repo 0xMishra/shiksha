@@ -10,6 +10,7 @@ export const CoursesBoughtInfoCard = async ({ id }: Course) => {
     where: {
       id: session?.user.id,
     },
+
     include: {
       coursesBought: {
         where: {
