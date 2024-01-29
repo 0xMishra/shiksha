@@ -3,6 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { getServerAuthSession } from "./server/auth";
 import { db } from "./server/db";
+import { createCourseSchema } from "./schemas/createCourseSchema";
+import { ZodError } from "zod";
+import { addChaptersToCourseSchema } from "./schemas/addChaptersToCourseSchema";
 
 export async function createCourse(formData: FormData) {
   try {
@@ -12,22 +15,33 @@ export async function createCourse(formData: FormData) {
     const price = formData.get("price") as string;
     const banner = formData.get("banner") as string;
 
-    await db.course.create({
-      data: {
-        name: name,
-        price: parseInt(price),
-        banner: banner,
-        creator: {
-          connect: {
-            id: session?.user.id,
-          },
-        },
-      },
+    const isInputValid = createCourseSchema.parse({
+      name: name,
+      price: price,
+      banner: banner,
     });
 
-    revalidatePath("/");
+    if (isInputValid) {
+      await db.course.create({
+        data: {
+          name: name,
+          price: parseInt(price),
+          banner: banner,
+          creator: {
+            connect: {
+              id: session?.user.id,
+            },
+          },
+        },
+      });
+
+      revalidatePath("/");
+      return "success";
+    }
   } catch (error) {
-    console.log(error);
+    if (error instanceof ZodError) {
+      return "zod error";
+    }
   }
 }
 
@@ -38,17 +52,29 @@ export async function addChaptersToCourse(formData: FormData) {
     const videoUrl = formData.get("videoUrl") as string;
     const courseId = formData.get("courseId") as string;
 
-    await db.chapter.create({
-      data: {
-        name: name,
-        description: desc,
-        videoUrl: videoUrl,
-        courseId: courseId,
-      },
+    const isInputValid = addChaptersToCourseSchema.parse({
+      name: name,
+      desc: desc,
+      videoUrl: videoUrl,
+      courseId: courseId,
     });
 
-    revalidatePath(`courses/explore/${courseId}`);
+    if (isInputValid) {
+      await db.chapter.create({
+        data: {
+          name: name,
+          description: desc,
+          videoUrl: videoUrl,
+          courseId: courseId,
+        },
+      });
+
+      revalidatePath(`courses/explore/${courseId}`);
+      return "success";
+    }
   } catch (error) {
-    console.log(error);
+    if (error instanceof ZodError) {
+      return "zod error";
+    }
   }
 }

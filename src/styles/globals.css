@@ -23,7 +23,7 @@ body {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #365315;
+  background: #274503;
 }
 
 @layer base {

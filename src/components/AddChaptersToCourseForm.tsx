@@ -16,23 +16,44 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, type ChangeEvent } from "react";
+import { toast } from "./ui/use-toast";
+import { useFormStatus } from "react-dom";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   desc: z.string().min(5),
 });
 
+const SubmitButton = () => {
+  const { pending } = useFormStatus();
+  return (
+    <>
+      {pending ? (
+        <Button disabled variant={"primary"} className="w-[70px]">
+          <Loader2 />
+        </Button>
+      ) : (
+        <Button
+          type="submit"
+          variant={"primary"}
+          className="w-[70px] text-center"
+        >
+          Submit
+        </Button>
+      )}
+    </>
+  );
+};
+
 export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [videoUrl, setVideoUrl] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -42,6 +63,75 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
       desc: "",
     },
   });
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const isVideoFile = (fileName: string): boolean => {
+    const videoExtensions = [
+      ".mp4",
+      ".webm",
+      ".ogg",
+      ".mkv",
+      ".avi",
+      ".mov",
+      ".wmv",
+    ];
+    const lowerCaseFileName = fileName.toLowerCase();
+    return videoExtensions.some((ext) => lowerCaseFileName.endsWith(ext));
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const fileInput = e.target;
+    const videoPreview = videoRef.current;
+
+    if (fileInput.files) {
+      if (fileInput.files[0]) {
+        const fileName = fileInput.files[0].name;
+
+        if (isVideoFile(fileName)) {
+          const reader = new FileReader();
+
+          reader.onload = (event) => {
+            const url = event.target?.result as string;
+            setVideoUrl(url);
+
+            if (videoPreview) {
+              videoPreview.src = url;
+            }
+          };
+          reader.readAsDataURL(fileInput.files[0]);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "wrong input file type",
+            description: "Please select a valid video file.",
+          });
+          fileInput.value = ""; // Clear the file input
+        }
+      }
+    } else {
+      setVideoUrl("");
+
+      if (videoPreview) {
+        videoPreview.src = "";
+      }
+    }
+  };
+
+  async function addChaptersToCourseAction(formData: FormData) {
+    const res = await addChaptersToCourse(formData);
+    if (res === "success") {
+      formRef.current?.reset();
+      setVideoUrl("");
+    } else if (res === "zod error") {
+      setVideoUrl("");
+      toast({
+        variant: "destructive",
+        title: "invalid input length",
+        description: "Input is invalid either too short or too long",
+      });
+    }
+  }
 
   return (
     <div className="mt-10 flex h-[100%] w-[100%] items-start justify-center  lg:justify-center">
@@ -54,22 +144,19 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
           <Form {...form}>
             <form
               ref={formRef}
-              action={async (formData: FormData) => {
-                setIsLoading(true);
-                await addChaptersToCourse(formData);
-                formRef.current?.reset();
-                setIsLoading(false);
-              }}
+              action={addChaptersToCourseAction}
               className="space-y-8"
             >
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input required placeholder="name of chapter" name="name" />
+                  <Input
+                    required
+                    min={3}
+                    placeholder="name of chapter (minimum 3 characters)"
+                    name="name"
+                  />
                 </FormControl>
-                <FormDescription>
-                  This is the name of the chapter
-                </FormDescription>
                 <FormMessage />
               </FormItem>
 
@@ -78,13 +165,10 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
                 <FormControl>
                   <Input
                     required
-                    placeholder="description of the chapter"
+                    placeholder="description of the chapter (minimum 5 characters)"
                     name="desc"
                   />
                 </FormControl>
-                <FormDescription>
-                  This is the description of the chapter
-                </FormDescription>
                 <FormMessage />
               </FormItem>
 
@@ -95,11 +179,9 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
                     placeholder="video of the chapter"
                     type="file"
                     required
+                    onChange={handleFileChange}
                   />
                 </FormControl>
-                <FormDescription>
-                  This is the video of the chapter
-                </FormDescription>
                 <FormMessage />
               </FormItem>
 
@@ -113,22 +195,21 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
                 name="videoUrl"
               />
 
+              {videoUrl ? (
+                <div>
+                  <video ref={videoRef} src={videoUrl} width="400" controls />
+                </div>
+              ) : (
+                ""
+              )}
+
               <input
                 type="text"
                 defaultValue={courseId}
                 hidden
                 name="courseId"
               />
-
-              {isLoading ? (
-                <Button disabled variant={"primary"}>
-                  <Loader2 />
-                </Button>
-              ) : (
-                <Button type="submit" variant={"primary"}>
-                  Submit
-                </Button>
-              )}
+              <SubmitButton />
             </form>
           </Form>
         </CardContent>

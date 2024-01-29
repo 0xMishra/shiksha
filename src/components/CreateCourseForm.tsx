@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormItem,
   FormLabel,
   FormMessage,
@@ -25,11 +24,34 @@ import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState, type ChangeEvent } from "react";
+import { toast } from "./ui/use-toast";
+import { useFormStatus } from "react-dom";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   price: z.string().min(1),
 });
+
+const SubmitButton = () => {
+  const { pending } = useFormStatus();
+  return (
+    <>
+      {pending ? (
+        <Button disabled variant={"primary"} className="w-[70px]">
+          <Loader2 />
+        </Button>
+      ) : (
+        <Button
+          type="submit"
+          variant={"primary"}
+          className="w-[70px] text-center"
+        >
+          Submit
+        </Button>
+      )}
+    </>
+  );
+};
 
 export const CreateCourseForm = () => {
   const [imageData, setImageData] = useState<string>("");
@@ -60,6 +82,23 @@ export const CreateCourseForm = () => {
     },
   });
 
+  async function createCourseAction(formData: FormData) {
+    setIsLoading(true);
+    const res = await createCourse(formData);
+    if (res === "success") {
+      formRef.current?.reset();
+      setIsLoading(false);
+      setImageData("");
+    } else if (res === "zod error") {
+      setIsLoading(false);
+      toast({
+        variant: "destructive",
+        title: "invalid input length",
+        description: "Input is invalid either too short or too long",
+      });
+    }
+  }
+
   return (
     <div className="mt-10 flex h-[100%] w-[100%] items-start justify-center  lg:justify-center">
       <Card className="w-[90%] max-w-[700px]">
@@ -71,34 +110,31 @@ export const CreateCourseForm = () => {
           <Form {...form}>
             <form
               ref={formRef}
-              action={async (formData: FormData) => {
-                setIsLoading(true);
-                await createCourse(formData);
-                formRef.current?.reset();
-                setIsLoading(false);
-                setImageData("");
-              }}
+              action={createCourseAction}
               className="space-y-8"
             >
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input required placeholder="name of course" name="name" />
+                  <Input
+                    required
+                    min={4}
+                    placeholder="name of course (minimum 4 characters)"
+                    name="name"
+                  />
                 </FormControl>
-                <FormDescription>
-                  This is the name of the course
-                </FormDescription>
                 <FormMessage />
               </FormItem>
 
               <FormItem>
                 <FormLabel>Price</FormLabel>
                 <FormControl>
-                  <Input required placeholder="price of course" name="price" />
+                  <Input
+                    required
+                    placeholder="price of course (input 0 if it's free)"
+                    name="price"
+                  />
                 </FormControl>
-                <FormDescription>
-                  This is the price of the course
-                </FormDescription>
                 <FormMessage />
               </FormItem>
 
@@ -112,9 +148,6 @@ export const CreateCourseForm = () => {
                     required
                   />
                 </FormControl>
-                <FormDescription>
-                  This is the banner of the course
-                </FormDescription>
                 <FormMessage />
               </FormItem>
 
@@ -141,15 +174,7 @@ export const CreateCourseForm = () => {
                 </div>
               )}
 
-              {isLoading ? (
-                <Button disabled variant={"primary"}>
-                  <Loader2 />
-                </Button>
-              ) : (
-                <Button type="submit" variant={"primary"}>
-                  Submit
-                </Button>
-              )}
+              <SubmitButton />
             </form>
           </Form>
         </CardContent>

@@ -28,143 +28,149 @@ export const CourseInfoCard = async ({
     },
   });
 
-  const userWithCoursesBought = await db.user.findUnique({
-    where: {
-      id: session?.user.id,
-    },
-    include: {
-      coursesBought: {
-        where: {
-          id: id,
-        },
+  // to check if you are logged in
+  if (session) {
+    // if you have not bought this course and you are logged ib
+    const userWithCoursesBought = await db.user.findUnique({
+      where: {
+        id: session?.user.id,
       },
-    },
-  });
-
-  if (userWithCoursesBought?.coursesBought.length) {
-    let completetedChapters = 0;
-
-    let completetionRate = 0;
-
-    let totalChapters = 0;
-
-    const completedChapters = await db.course.findMany({
-      where: { id: id },
       include: {
-        chapters: {
+        coursesBought: {
           where: {
-            isCompleted: true,
+            id: id,
           },
         },
       },
     });
 
-    completetedChapters = completedChapters.length;
+    if (userWithCoursesBought?.coursesBought.length) {
+      let completetedChapters = 0;
 
-    const allChapters = await db.course.findMany({
-      where: { id: id },
+      let completetionRate = 0;
+
+      let totalChapters = 0;
+
+      const completedChapters = await db.course.findMany({
+        where: { id: id },
+        include: {
+          chapters: {
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+      });
+
+      completetedChapters = completedChapters.length;
+
+      const allChapters = await db.course.findMany({
+        where: { id: id },
+        include: {
+          chapters: true,
+        },
+      });
+
+      totalChapters = allChapters.length;
+
+      if (!totalChapters) {
+        completetionRate = (completetedChapters / totalChapters) * 100;
+      }
+
+      return (
+        <Link href={`/courses/explore/${id}`} className="">
+          <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center shadow-md md:max-w-[300px]">
+            <CardHeader className="w-[100%]">
+              <Image
+                src={banner}
+                alt="course banner "
+                className="h-[200px] w-[99%] place-content-center object-cover "
+                blurDataURL="blur"
+                height={900}
+                width={900}
+                style={{
+                  height: "auto",
+                  width: "auto",
+                }}
+                priority
+              />
+              <CardTitle>
+                {name.length > maxLength
+                  ? name.substring(0, maxLength) + "..."
+                  : name}
+              </CardTitle>
+              <CardDescription>{creator?.name}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>{numberOfChapters} chapters</p>
+              {userWithCoursesBought?.coursesBought.length ? (
+                <p className="font-semibold">{completetionRate}% complete</p>
+              ) : (
+                <p className="font-semibold">Price: {price} USD</p>
+              )}
+            </CardContent>
+          </Card>
+        </Link>
+      );
+    }
+
+    // if you have created this course and you are logged in
+    const userWithCoursesSold = await db.user.findUnique({
+      where: {
+        id: session?.user.id,
+      },
       include: {
-        chapters: true,
+        coursesCreated: {
+          where: {
+            id: id,
+          },
+        },
       },
     });
 
-    totalChapters = allChapters.length;
+    if (userWithCoursesSold?.coursesCreated.length) {
+      let numberOfBuyers = 0;
+      if (userWithCoursesSold?.coursesCreated[0]?.numberOfBuyers) {
+        numberOfBuyers = userWithCoursesSold?.coursesCreated[0]?.numberOfBuyers;
+      }
 
-    if (!totalChapters) {
-      completetionRate = (completetedChapters / totalChapters) * 100;
+      return (
+        <Link href={`/courses/explore/${id}`} className="">
+          <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center shadow-md md:max-w-[300px]">
+            <CardHeader className="w-[100%]">
+              <Image
+                src={banner}
+                alt="course banner "
+                className="h-[200px] w-[99%] place-content-center object-cover "
+                blurDataURL="blur"
+                height={900}
+                width={900}
+                style={{
+                  height: "auto",
+                  width: "auto",
+                }}
+                priority
+              />
+              <CardTitle>
+                {name.length > maxLength
+                  ? name.substring(0, maxLength) + "..."
+                  : name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="w-[100%]">
+              <p>{numberOfChapters} chapters</p>
+              <p className="mt-4">Price: {price} USD</p>
+              <p className="font-semibold">
+                Revenue: {numberOfBuyers * price} USD
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
+      );
     }
-
-    return (
-      <Link href={`/courses/explore/${id}`} className="">
-        <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center shadow-md md:max-w-[300px]">
-          <CardHeader className="w-[100%]">
-            <Image
-              src={banner}
-              alt="course banner "
-              className="h-[200px] w-[99%] place-content-center object-cover "
-              blurDataURL="blur"
-              height={900}
-              width={900}
-              style={{
-                height: "auto",
-                width: "auto",
-              }}
-              priority
-            />
-            <CardTitle>
-              {name.length > maxLength
-                ? name.substring(0, maxLength) + "..."
-                : name}
-            </CardTitle>
-            <CardDescription>{creator?.name}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>{numberOfChapters} chapters</p>
-            {userWithCoursesBought?.coursesBought.length ? (
-              <p className="font-semibold">{completetionRate}% complete</p>
-            ) : (
-              <p className="font-semibold">Price: {price} USD</p>
-            )}
-          </CardContent>
-        </Card>
-      </Link>
-    );
   }
 
-  const userWithCoursesSold = await db.user.findUnique({
-    where: {
-      id: session?.user.id,
-    },
-    include: {
-      coursesCreated: {
-        where: {
-          id: id,
-        },
-      },
-    },
-  });
-
-  if (userWithCoursesSold?.coursesCreated.length) {
-    let numberOfBuyers = 0;
-    if (userWithCoursesSold?.coursesCreated[0]?.numberOfBuyers) {
-      numberOfBuyers = userWithCoursesSold?.coursesCreated[0]?.numberOfBuyers;
-    }
-
-    return (
-      <Link href={`/courses/explore/${id}`} className="">
-        <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center shadow-md md:max-w-[300px]">
-          <CardHeader className="w-[100%]">
-            <Image
-              src={banner}
-              alt="course banner "
-              className="h-[200px] w-[99%] place-content-center object-cover "
-              blurDataURL="blur"
-              height={900}
-              width={900}
-              style={{
-                height: "auto",
-                width: "auto",
-              }}
-              priority
-            />
-            <CardTitle>
-              {name.length > maxLength
-                ? name.substring(0, maxLength) + "..."
-                : name}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="w-[100%]">
-            <p>{numberOfChapters} chapters</p>
-            <p className="mt-4">Price: {price} USD</p>
-            <p className="font-semibold">
-              Revenue: {numberOfBuyers * price} USD
-            </p>
-          </CardContent>
-        </Card>
-      </Link>
-    );
-  }
-
+  // if you have neither created nor bought this course and you are not logged in
   return (
     <Link href={`/courses/explore/${id}`} className="">
       <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center shadow-md md:max-w-[300px]">
@@ -190,7 +196,7 @@ export const CourseInfoCard = async ({
         </CardHeader>
         <CardContent>
           <p>{numberOfChapters} chapters</p>
-          <p className="mt-4">Price: {price} USD</p>
+          <p className="mt-4 font-semibold">Price: {price} USD</p>
         </CardContent>
       </Card>
     </Link>
