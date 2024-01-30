@@ -60,12 +60,21 @@ export async function addChaptersToCourse(formData: FormData) {
     });
 
     if (isInputValid) {
-      await db.chapter.create({
+      const newChapter = await db.chapter.create({
         data: {
           name: name,
           description: desc,
           videoUrl: videoUrl,
           courseId: courseId,
+        },
+      });
+
+      await db.course.update({
+        where: {
+          id: newChapter.courseId,
+        },
+        data: {
+          numberOfChapters: { increment: 1 },
         },
       });
 

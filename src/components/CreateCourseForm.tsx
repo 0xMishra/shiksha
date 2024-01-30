@@ -56,7 +56,6 @@ const SubmitButton = () => {
 export const CreateCourseForm = () => {
   const [imageData, setImageData] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -83,14 +82,17 @@ export const CreateCourseForm = () => {
   });
 
   async function createCourseAction(formData: FormData) {
-    setIsLoading(true);
     const res = await createCourse(formData);
     if (res === "success") {
       formRef.current?.reset();
-      setIsLoading(false);
       setImageData("");
+
+      toast({
+        variant: "default",
+        title: "course created",
+        description: "A new course created successfully",
+      });
     } else if (res === "zod error") {
-      setIsLoading(false);
       toast({
         variant: "destructive",
         title: "invalid input length",
@@ -143,7 +145,7 @@ export const CreateCourseForm = () => {
                 <FormControl>
                   <Input
                     placeholder="name of course"
-                    type="file"
+                    type="image"
                     onChange={handleImageChange}
                     required
                   />

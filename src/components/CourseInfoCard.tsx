@@ -28,7 +28,7 @@ export const CourseInfoCard = async ({
     },
   });
 
-  // to check if you are logged in
+  // if you are logged in
   if (session) {
     // if you have not bought this course and you are logged ib
     const userWithCoursesBought = await db.user.findUnique({
@@ -88,10 +88,6 @@ export const CourseInfoCard = async ({
                 blurDataURL="blur"
                 height={900}
                 width={900}
-                style={{
-                  height: "auto",
-                  width: "auto",
-                }}
                 priority
               />
               <CardTitle>
@@ -145,10 +141,6 @@ export const CourseInfoCard = async ({
                 blurDataURL="blur"
                 height={900}
                 width={900}
-                style={{
-                  height: "auto",
-                  width: "auto",
-                }}
                 priority
               />
               <CardTitle>
@@ -182,10 +174,6 @@ export const CourseInfoCard = async ({
             blurDataURL="blur"
             height={900}
             width={900}
-            style={{
-              height: "auto",
-              width: "auto",
-            }}
             priority
           />
           <CardTitle>

@@ -123,6 +123,11 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
     if (res === "success") {
       formRef.current?.reset();
       setVideoUrl("");
+      toast({
+        variant: "default",
+        title: "chapter added",
+        description: "New chapter added to the course successfully",
+      });
     } else if (res === "zod error") {
       setVideoUrl("");
       toast({

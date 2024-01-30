@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
-import Link from "next/link";
+import Course from "./_components/Course";
 
 const CourseIdPage = async ({
   params,
@@ -14,6 +13,9 @@ const CourseIdPage = async ({
 
   const course = await db.course.findUnique({
     where: { id: params.courseId },
+    include: {
+      chapters: true,
+    },
   });
 
   const userWithCourseSold = await db.user.findUnique({
@@ -34,22 +36,12 @@ const CourseIdPage = async ({
   }
 
   return (
-    <section className="mt-4 flex w-[100vw] items-center justify-center p-2 md:ml-64 md:pr-72 ">
-      <div className="flex w-[100%] items-center justify-between gap-2">
-        <h2 className="text-2xl font-semibold">{course?.name}</h2>
-        {isUserCourseCreator ? (
-          <Button variant={"primary"} asChild>
-            <Link href={`/courses/create/${params.courseId}/add-chapters`}>
-              Add chapters
-            </Link>
-          </Button>
-        ) : (
-          <Button variant={"primary"} asChild>
-            <Link href={`/`}>Browse courses</Link>
-          </Button>
-        )}
-      </div>
-    </section>
+    <Course
+      chapters={course ? course.chapters : []}
+      isUserCourseCreator={isUserCourseCreator}
+      courseId={params.courseId}
+      courseName={course ? course.name : ""}
+    />
   );
 };
 
