@@ -1,6 +1,7 @@
 import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
 import Course from "./_components/Course";
+import { redirect } from "next/navigation";
 
 const CourseIdPage = async ({
   params,
@@ -10,6 +11,10 @@ const CourseIdPage = async ({
   };
 }) => {
   const session = await getServerAuthSession();
+
+  if (!session) {
+    return redirect("/sign-up");
+  }
 
   const course = await db.course.findUnique({
     where: { id: params.courseId },

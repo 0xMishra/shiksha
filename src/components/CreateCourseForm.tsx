@@ -1,5 +1,4 @@
 "use client";
-
 import { createCourse } from "@/actions";
 import {
   Card,
@@ -145,7 +144,7 @@ export const CreateCourseForm = () => {
                 <FormControl>
                   <Input
                     placeholder="name of course"
-                    type="image"
+                    type="file"
                     onChange={handleImageChange}
                     required
                   />

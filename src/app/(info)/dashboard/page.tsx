@@ -25,14 +25,16 @@ const DashboardPage = async () => {
     },
   });
 
+  console.log(userWithCoursesSold?.coursesCreated.length);
+
   return (
     <div className="mt-10 flex h-[100vh] w-[100vw] items-start justify-center">
-      <div className="mb-8 mt-8 flex w-[100%] flex-col items-center justify-start md:pl-64 ">
+      <div className="mb-8 mt-8 flex w-[100%] flex-col items-center justify-start md:pl-64">
         <h1 className="mb-4 text-3xl font-semibold">Courses bought</h1>
 
         <section className="flex w-[100%] flex-col items-center justify-center gap-2 p-2 md:flex-row md:gap-0 lg:justify-between lg:gap-2">
-          <div className="flex w-[100%] items-center justify-center md:w-[50%] ">
-            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 shadow-md md:w-[80%] lg:w-[100%] ">
+          <div className="flex w-[100%] items-center justify-center md:w-[50%]">
+            <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 shadow-md md:w-[80%] lg:w-[100%]">
               <Clock4 size={30} />
               <CardHeader>
                 <CardTitle>In progress</CardTitle>

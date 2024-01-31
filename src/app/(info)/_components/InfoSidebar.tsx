@@ -29,7 +29,7 @@ const InfoSidebar = () => {
   return (
     <div
       className={
-        "fixed inset-y-0 left-0  z-20 mt-[60px] hidden w-64 translate-x-0 transform border-r-[1px] border-solid border-r-gray-800 bg-white p-4 text-black transition-transform duration-300 ease-in-out md:block"
+        "fixed inset-y-0 left-0 mt-[60px] hidden w-64 translate-x-0 transform border-r-[1px] border-solid border-r-gray-800 bg-white p-4 text-black transition-transform duration-300 ease-in-out md:block"
       }
     >
       <div className="mt-8 flex flex-col items-center justify-center py-2 ">

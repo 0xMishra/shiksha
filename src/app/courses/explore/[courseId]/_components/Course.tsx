@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getChapterSchema } from "@/schemas/getChapterSchema";
-import * as z from "zod";
+import type * as z from "zod";
 
 type ChaptersInfo = {
   id: string;
@@ -63,7 +63,7 @@ const Course = ({
           }
         >
           <div className="mt-8 flex cursor-pointer flex-col items-center justify-center py-2 ">
-            {chapters ? (
+            {chapters.length ? (
               chapters.map((chapter) => {
                 let extraClasses = "";
                 if (chapter.id === chapterId) {
@@ -86,12 +86,13 @@ const Course = ({
                 );
               })
             ) : (
-              <h2 className="text-xl font-semibold text-gray-300">
+              <h2 className="text-xl font-semibold text-gray-500">
                 No chapters yet
               </h2>
             )}
           </div>
         </div>
+
         <section className="mt-4 flex w-[100vw] flex-col items-center justify-center p-2 md:ml-64 md:pr-72 ">
           <div className="flex w-[100%] items-center justify-between gap-2">
             <h2 className="text-2xl font-semibold">{courseName}</h2>
@@ -106,10 +107,6 @@ const Course = ({
                 <Link href={`/`}>Browse courses</Link>
               </Button>
             )}
-          </div>
-
-          <div>
-            <video src={chapter?.videoUrl} />
           </div>
         </section>
       </div>
