@@ -108,6 +108,9 @@ const Course = ({
               </Button>
             )}
           </div>
+
+          {/* the video will render here */}
+          <div></div>
         </section>
       </div>
     </main>
