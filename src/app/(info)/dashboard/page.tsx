@@ -22,10 +22,18 @@ const DashboardPage = async () => {
           creator: session?.user,
         },
       },
+      coursesCompleted: true,
+      coursesBought: true,
     },
   });
 
-  console.log(userWithCoursesSold?.coursesCreated.length);
+  let coursesInProgress = 0;
+
+  if (userWithCoursesSold) {
+    coursesInProgress =
+      userWithCoursesSold?.coursesBought.length -
+      userWithCoursesSold?.coursesCompleted.length;
+  }
 
   return (
     <div className="mt-10 flex h-[100vh] w-[100vw] items-start justify-center">
@@ -38,7 +46,7 @@ const DashboardPage = async () => {
               <Clock4 size={30} />
               <CardHeader>
                 <CardTitle>In progress</CardTitle>
-                <CardDescription>{5} courses</CardDescription>
+                <CardDescription>{coursesInProgress} courses</CardDescription>
               </CardHeader>
             </Card>
           </div>
@@ -48,7 +56,9 @@ const DashboardPage = async () => {
               <CheckCircle size={30} />
               <CardHeader>
                 <CardTitle>Completed</CardTitle>
-                <CardDescription>{0} courses</CardDescription>
+                <CardDescription>
+                  {userWithCoursesSold?.coursesCompleted.length} courses
+                </CardDescription>
               </CardHeader>
             </Card>
           </div>

@@ -25,6 +25,7 @@ import { Loader2 } from "lucide-react";
 import { useRef, useState, type ChangeEvent } from "react";
 import { toast } from "./ui/use-toast";
 import { useFormStatus } from "react-dom";
+import { UploadButton } from "@/utils/uploadthing";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -37,7 +38,7 @@ const SubmitButton = () => {
     <>
       {pending ? (
         <Button disabled variant={"primary"} className="w-[70px]">
-          <Loader2 />
+          <Loader2 className="animate-spin" />
         </Button>
       ) : (
         <Button
@@ -55,6 +56,7 @@ const SubmitButton = () => {
 export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [videoUrl, setVideoUrl] = useState<string>("");
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,60 +65,6 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
       desc: "",
     },
   });
-
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-
-  const isVideoFile = (fileName: string): boolean => {
-    const videoExtensions = [
-      ".mp4",
-      ".webm",
-      ".ogg",
-      ".mkv",
-      ".avi",
-      ".mov",
-      ".wmv",
-    ];
-    const lowerCaseFileName = fileName.toLowerCase();
-    return videoExtensions.some((ext) => lowerCaseFileName.endsWith(ext));
-  };
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const fileInput = e.target;
-    const videoPreview = videoRef.current;
-
-    if (fileInput.files) {
-      if (fileInput.files[0]) {
-        const fileName = fileInput.files[0].name;
-
-        if (isVideoFile(fileName)) {
-          const reader = new FileReader();
-
-          reader.onload = (event) => {
-            const url = event.target?.result as string;
-            setVideoUrl(url);
-
-            if (videoPreview) {
-              videoPreview.src = url;
-            }
-          };
-          reader.readAsDataURL(fileInput.files[0]);
-        } else {
-          toast({
-            variant: "destructive",
-            title: "wrong input file type",
-            description: "Please select a valid video file.",
-          });
-          fileInput.value = ""; // Clear the file input
-        }
-      }
-    } else {
-      setVideoUrl("");
-
-      if (videoPreview) {
-        videoPreview.src = "";
-      }
-    }
-  };
 
   async function addChaptersToCourseAction(formData: FormData) {
     const res = await addChaptersToCourse(formData);
@@ -176,16 +124,29 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
                 </FormControl>
                 <FormMessage />
               </FormItem>
-
               <FormItem>
                 <FormLabel>Video</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="video of the chapter"
-                    type="file"
-                    required
-                    onChange={handleFileChange}
-                  />
+                  <div className="flex flex-col items-center justify-between ">
+                    <UploadButton
+                      endpoint="videoUploader"
+                      onUploadBegin={() => {
+                        setIsUploading(true);
+                      }}
+                      onClientUploadComplete={(res) => {
+                        console.log("Files: ", res);
+                        setIsUploading(false);
+                        if (res[0]?.url) {
+                          setVideoUrl(res[0].url);
+                        }
+                        alert("Upload Completed");
+                      }}
+                      onUploadError={(error: Error) => {
+                        setIsUploading(false);
+                        alert(`ERROR! ${error.message}`);
+                      }}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -202,8 +163,13 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
 
               {videoUrl ? (
                 <div className="relative ">
-                  <video ref={videoRef} src={videoUrl} width="400" controls />
+                  <video src={videoUrl} width="400" controls />
                 </div>
+              ) : isUploading ? (
+                <Loader2
+                  className="flex animate-spin items-center justify-center text-center"
+                  size={30}
+                />
               ) : (
                 ""
               )}

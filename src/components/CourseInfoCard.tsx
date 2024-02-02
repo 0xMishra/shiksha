@@ -51,18 +51,20 @@ export const CourseInfoCard = async ({
 
       let totalChapters = 0;
 
-      const completedChapters = await db.course.findMany({
+      const completedChapters = await db.user.findUnique({
         where: { id: id },
         include: {
-          chapters: {
+          chaptersCompleted: {
             where: {
-              isCompleted: true,
+              courseId: id,
             },
           },
         },
       });
 
-      completetedChapters = completedChapters.length;
+      if (completedChapters) {
+        completetedChapters = completedChapters?.chaptersCompleted.length;
+      }
 
       const allChapters = await db.course.findMany({
         where: { id: id },
@@ -102,7 +104,7 @@ export const CourseInfoCard = async ({
               {userWithCoursesBought?.coursesBought.length ? (
                 <p className="font-semibold">{completetionRate}% complete</p>
               ) : (
-                <p className="font-semibold">Price: {price} USD</p>
+                <p className="mt-4">Price: {price == 0 ? "Free" : price} USD</p>
               )}
             </CardContent>
           </Card>
@@ -151,7 +153,7 @@ export const CourseInfoCard = async ({
             </CardHeader>
             <CardContent className="w-[100%]">
               <p>{numberOfChapters} chapters</p>
-              <p className="mt-4">Price: {price} USD</p>
+              <p className="mt-4">Price: {price == 0 ? "Free" : price} USD</p>
               <p className="font-semibold">
                 Revenue: {numberOfBuyers * price} USD
               </p>
@@ -184,7 +186,7 @@ export const CourseInfoCard = async ({
         </CardHeader>
         <CardContent>
           <p>{numberOfChapters} chapters</p>
-          <p className="mt-4 font-semibold">Price: {price} USD</p>
+          <p className="mt-4">Price: {price == 0 ? "Free" : price} USD</p>
         </CardContent>
       </Card>
     </Link>

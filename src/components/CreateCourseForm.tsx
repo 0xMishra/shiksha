@@ -37,7 +37,7 @@ const SubmitButton = () => {
     <>
       {pending ? (
         <Button disabled variant={"primary"} className="w-[70px]">
-          <Loader2 />
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         </Button>
       ) : (
         <Button

@@ -5,7 +5,6 @@ import { CourseInfoCard } from "./CourseInfoCard";
 
 export const CoursesSoldInfoCard = async ({ id }: Course) => {
   const session = await getServerAuthSession();
-
   const userWithCoursesSold = await db.user.findUnique({
     where: {
       id: session?.user.id,

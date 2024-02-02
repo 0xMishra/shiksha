@@ -1,12 +1,13 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getChapterSchema } from "@/schemas/getChapterSchema";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { getChapterSchema } from "@/schemas/getChapterSchema";
 import type * as z from "zod";
-import { Loader2 } from "lucide-react";
 
 type ChaptersInfo = {
   id: string;
@@ -31,9 +32,12 @@ const Course = ({
   const [chapterId, setChapterId] = useState<string>("");
   const [isFirst, setIsFirst] = useState<boolean>(true);
   const [chapter, setChapter] = useState<z.infer<typeof getChapterSchema>>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getChapter = async () => {
+    setIsLoading(true);
     const chapter = await axios.get(`/api/chapter?id=${chapterId}`);
+    console.log(chapter);
     const parsedChapter = getChapterSchema.parse(chapter.data);
     setChapter(parsedChapter);
     return parsedChapter;
@@ -49,9 +53,16 @@ const Course = ({
     if (chapterId.length > 0) {
       getChapter()
         .then((data) => {
+          setIsLoading(true);
           console.log(data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          setIsLoading(false);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   }, [chapterId]);
 
@@ -110,16 +121,13 @@ const Course = ({
             )}
           </div>
 
-          {/* the video will render here */}
           <div className="m-3">
             {chapter ? (
-              <video
-                className="relative z-0 m-3 rounded-md"
-                src={chapter.videoUrl}
-                controls
-              ></video>
+              <video src={chapter.videoUrl} controls />
+            ) : isLoading ? (
+              <Loader2 className="mr-2 mt-20 h-12 w-12 animate-spin text-lime-900" />
             ) : (
-              <Loader2 />
+              ""
             )}
             <p className="text-xl font-semibold text-gray-600">
               {chapter?.description}
