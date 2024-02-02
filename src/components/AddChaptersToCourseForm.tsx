@@ -1,4 +1,5 @@
 "use client";
+
 import { addChaptersToCourse } from "@/actions";
 import {
   Card,
@@ -8,10 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
-import MuxUploader, {
-  MuxUploaderFileSelect,
-  MuxUploaderProgress,
-} from "@mux/mux-uploader-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -25,9 +22,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-import { useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useRef, useState, type ChangeEvent } from "react";
 import { toast } from "./ui/use-toast";
+import { useFormStatus } from "react-dom";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -67,7 +64,59 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
     },
   });
 
-  const videoRef = useRef<typeof MuxUploaderElement | undefined>(undefined);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const isVideoFile = (fileName: string): boolean => {
+    const videoExtensions = [
+      ".mp4",
+      ".webm",
+      ".ogg",
+      ".mkv",
+      ".avi",
+      ".mov",
+      ".wmv",
+    ];
+    const lowerCaseFileName = fileName.toLowerCase();
+    return videoExtensions.some((ext) => lowerCaseFileName.endsWith(ext));
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const fileInput = e.target;
+    const videoPreview = videoRef.current;
+
+    if (fileInput.files) {
+      if (fileInput.files[0]) {
+        const fileName = fileInput.files[0].name;
+
+        if (isVideoFile(fileName)) {
+          const reader = new FileReader();
+
+          reader.onload = (event) => {
+            const url = event.target?.result as string;
+            setVideoUrl(url);
+
+            if (videoPreview) {
+              videoPreview.src = url;
+            }
+          };
+          reader.readAsDataURL(fileInput.files[0]);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "wrong input file type",
+            description: "Please select a valid video file.",
+          });
+          fileInput.value = ""; // Clear the file input
+        }
+      }
+    } else {
+      setVideoUrl("");
+
+      if (videoPreview) {
+        videoPreview.src = "";
+      }
+    }
+  };
 
   async function addChaptersToCourseAction(formData: FormData) {
     const res = await addChaptersToCourse(formData);
@@ -131,27 +180,12 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
               <FormItem>
                 <FormLabel>Video</FormLabel>
                 <FormControl>
-                  <div className="p-4">
-                    <MuxUploader
-                      id="my-uploader"
-                      className="hidden"
-                      endpoint="https://api.mux.com/video/v1/uploads"
-                    />
-
-                    <MuxUploaderFileSelect
-                      ref={videoRef}
-                      muxUploader="my-uploader"
-                    >
-                      <button className="my-2 rounded-md border-2 border-solid border-lime-900 bg-white px-4 py-2 text-sm text-lime-900">
-                        Select from a folder
-                      </button>
-                    </MuxUploaderFileSelect>
-
-                    <MuxUploaderProgress
-                      type="percentage"
-                      muxUploader="my-uploader"
-                    />
-                  </div>
+                  <Input
+                    placeholder="video of the chapter"
+                    type="file"
+                    required
+                    onChange={handleFileChange}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -167,7 +201,7 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
               />
 
               {videoUrl ? (
-                <div>
+                <div className="relative ">
                   <video ref={videoRef} src={videoUrl} width="400" controls />
                 </div>
               ) : (

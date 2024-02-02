@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { getChapterSchema } from "@/schemas/getChapterSchema";
 import type * as z from "zod";
+import { Loader2 } from "lucide-react";
 
 type ChaptersInfo = {
   id: string;
@@ -110,7 +111,20 @@ const Course = ({
           </div>
 
           {/* the video will render here */}
-          <div></div>
+          <div className="m-3">
+            {chapter ? (
+              <video
+                className="relative z-0 m-3 rounded-md"
+                src={chapter.videoUrl}
+                controls
+              ></video>
+            ) : (
+              <Loader2 />
+            )}
+            <p className="text-xl font-semibold text-gray-600">
+              {chapter?.description}
+            </p>
+          </div>
         </section>
       </div>
     </main>

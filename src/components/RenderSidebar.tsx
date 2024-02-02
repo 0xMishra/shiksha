@@ -13,7 +13,7 @@ export default function RenderSidebar({
   };
 
   return (
-    <div>
+    <div className="relative z-10">
       <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} />
       {/* The rest of your app content */}
     </div>
