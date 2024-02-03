@@ -66,17 +66,15 @@ model VerificationToken {
 }
 
 model Course {
-  id               String    @id @default(uuid())
-  name             String
-  banner           String
-  creator          User      @relation("coursesCreatedBy", fields: [creatorId], references: [id], onDelete: Cascade)
-  creatorId        String
-  boughtBy         User[]    @relation("CourseBoughtBy")
-  completedBy      User[]
-  price            Int
-  numberOfChapters Int       @default(0)
-  numberOfBuyers   Int       @default(0)
-  chapters         Chapter[]
+  id          String    @id @default(uuid())
+  name        String
+  banner      String
+  creator     User      @relation("coursesCreatedBy", fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId   String
+  boughtBy    User[]    @relation("CourseBoughtBy")
+  completedBy User[]
+  price       Int
+  chapters    Chapter[]
 }
 
 model Chapter {

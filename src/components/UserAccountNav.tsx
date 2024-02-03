@@ -54,10 +54,7 @@ export const UserAccountNav = ({ session }: { session: Session }) => {
           >
             <div className="flex items-center ">
               <Notebook className="text-gray-600" />
-              <div
-                onClick={() => signOutWithGoogle()}
-                className=" relative -top-1 ml-2 text-center text-lg "
-              >
+              <div className=" relative -top-1 ml-2 text-center text-lg ">
                 my courses
               </div>
             </div>

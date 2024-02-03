@@ -81,7 +81,7 @@ const DashboardPage = async () => {
             <Card className="flex w-[100%] max-w-[400px] items-center justify-center p-2 shadow-md md:w-[80%] lg:w-[100%] ">
               <NotebookPen size={30} />
               <CardHeader>
-                <CardTitle>Courses sold</CardTitle>
+                <CardTitle>Courses created</CardTitle>
                 <CardDescription>
                   {userWithCoursesSold?.coursesCreated.length} courses
                 </CardDescription>
@@ -94,7 +94,9 @@ const DashboardPage = async () => {
               <DollarSign size={30} />
               <CardHeader>
                 <CardTitle>Total revenue</CardTitle>
-                <CardDescription>{1000} USD</CardDescription>
+                <CardDescription>
+                  {userWithCoursesSold?.revenueMade} USD
+                </CardDescription>
               </CardHeader>
             </Card>
           </div>

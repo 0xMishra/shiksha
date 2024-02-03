@@ -21,11 +21,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
-import { useRef, useState, type ChangeEvent } from "react";
-import { toast } from "./ui/use-toast";
-import { useFormStatus } from "react-dom";
 import { UploadButton } from "@/utils/uploadthing";
+import { Loader2 } from "lucide-react";
+import { useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { toast } from "./ui/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -67,7 +67,10 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
   });
 
   async function addChaptersToCourseAction(formData: FormData) {
-    const res = await addChaptersToCourse(formData);
+    let res;
+    if (videoUrl.length > 0) {
+      res = await addChaptersToCourse(formData);
+    }
     if (res === "success") {
       formRef.current?.reset();
       setVideoUrl("");
@@ -166,10 +169,9 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
                   <video src={videoUrl} width="400" controls />
                 </div>
               ) : isUploading ? (
-                <Loader2
-                  className="flex animate-spin items-center justify-center text-center"
-                  size={30}
-                />
+                <div className="flex items-center justify-center">
+                  <Loader2 className=" animate-spin " size={30} />
+                </div>
               ) : (
                 ""
               )}

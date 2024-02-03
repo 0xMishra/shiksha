@@ -23,9 +23,16 @@ const CourseIdPage = async ({
     },
   });
 
-  const userWithCourseSold = await db.user.findUnique({
-    where: { id: session?.user.id },
+  const userWithCourse = await db.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
     include: {
+      coursesBought: {
+        where: {
+          id: params.courseId,
+        },
+      },
       coursesCreated: {
         where: {
           id: params.courseId,
@@ -34,11 +41,35 @@ const CourseIdPage = async ({
     },
   });
 
+  let coursePreview = "";
+
+  const chaptersOfThisCourse = await db.chapter.findMany({
+    where: {
+      courseId: params.courseId,
+    },
+  });
+
+  if (chaptersOfThisCourse.length > 0) {
+    if (chaptersOfThisCourse[0]) {
+      coursePreview = chaptersOfThisCourse[0]?.videoUrl;
+    }
+  }
+
+  let hasUserBoughtThisCourse = false;
+
+  if (userWithCourse) {
+    if (userWithCourse.coursesBought.length > 0) {
+      hasUserBoughtThisCourse = true;
+    }
+  }
+
   let isUserCourseCreator = false;
 
-  if (userWithCourseSold?.coursesCreated?.length) {
+  if (userWithCourse?.coursesCreated?.length) {
     isUserCourseCreator = true;
   }
+
+  const coursePrice = course?.price ? course?.price.toString() : "";
 
   return (
     <Course
@@ -46,6 +77,9 @@ const CourseIdPage = async ({
       isUserCourseCreator={isUserCourseCreator}
       courseId={params.courseId}
       courseName={course ? course.name : ""}
+      hasUserBoughtThisCourse={hasUserBoughtThisCourse}
+      coursePreview={coursePreview}
+      coursePrice={coursePrice}
     />
   );
 };

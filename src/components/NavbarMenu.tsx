@@ -32,7 +32,7 @@ export const NavbarMenu = () => {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="md:hidden">
           <Logo />
         </div>
       )}

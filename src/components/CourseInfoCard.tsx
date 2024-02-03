@@ -16,7 +16,6 @@ export const CourseInfoCard = async ({
   banner,
   name,
   creatorId,
-  numberOfChapters,
   price,
 }: Course) => {
   const maxLength = 17;
@@ -25,6 +24,12 @@ export const CourseInfoCard = async ({
   const creator = await db.user.findFirst({
     where: {
       id: creatorId,
+    },
+  });
+
+  const numberOfChapters = await db.chapter.count({
+    where: {
+      courseId: id,
     },
   });
 
@@ -104,7 +109,9 @@ export const CourseInfoCard = async ({
               {userWithCoursesBought?.coursesBought.length ? (
                 <p className="font-semibold">{completetionRate}% complete</p>
               ) : (
-                <p className="mt-4">Price: {price == 0 ? "Free" : price} USD</p>
+                <p className="mt-4">
+                  Price: {price == 0 ? "Free" : price + "USD"}{" "}
+                </p>
               )}
             </CardContent>
           </Card>
@@ -127,11 +134,6 @@ export const CourseInfoCard = async ({
     });
 
     if (userWithCoursesSold?.coursesCreated.length) {
-      let numberOfBuyers = 0;
-      if (userWithCoursesSold?.coursesCreated[0]?.numberOfBuyers) {
-        numberOfBuyers = userWithCoursesSold?.coursesCreated[0]?.numberOfBuyers;
-      }
-
       return (
         <Link href={`/courses/explore/${id}`} className="">
           <Card className="flex w-[99vw] max-w-[415px] flex-col items-start justify-center shadow-md md:max-w-[300px]">
@@ -153,9 +155,11 @@ export const CourseInfoCard = async ({
             </CardHeader>
             <CardContent className="w-[100%]">
               <p>{numberOfChapters} chapters</p>
-              <p className="mt-4">Price: {price == 0 ? "Free" : price} USD</p>
+              <p className="mt-4">
+                Price: {price == 0 ? "Free" : price + "USD"}{" "}
+              </p>
               <p className="font-semibold">
-                Revenue: {numberOfBuyers * price} USD
+                Revenue: {userWithCoursesSold.revenueMade} USD
               </p>
             </CardContent>
           </Card>
@@ -186,7 +190,7 @@ export const CourseInfoCard = async ({
         </CardHeader>
         <CardContent>
           <p>{numberOfChapters} chapters</p>
-          <p className="mt-4">Price: {price == 0 ? "Free" : price} USD</p>
+          <p className="mt-4">Price: {price == 0 ? "Free" : price + "USD"} </p>
         </CardContent>
       </Card>
     </Link>
