@@ -1,6 +1,6 @@
 import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
-import Course from "./_components/Course";
+import { Course } from "./_components/Course";
 import { redirect } from "next/navigation";
 
 const CourseIdPage = async ({

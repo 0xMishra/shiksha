@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -24,7 +23,7 @@ type ChaptersInfo = {
   courseId: string;
 };
 
-const Course = ({
+export const Course = ({
   chapters,
   isUserCourseCreator,
   courseName,
@@ -47,15 +46,6 @@ const Course = ({
   const [chapter, setChapter] = useState<z.infer<typeof getChapterSchema>>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const getChapter = async () => {
-    const chapter = await axios.get(
-      `/api/chapter?id=${chapterId}&courseId=${courseId}`,
-    );
-    const parsedChapter = getChapterSchema.parse(chapter.data);
-    setChapter(parsedChapter);
-    return parsedChapter;
-  };
-
   useEffect(() => {
     if (isFirst && chapters[0]) {
       setChapterId(chapters[0]?.id);
@@ -63,13 +53,21 @@ const Course = ({
   }, [isFirst, chapters]);
 
   useEffect(() => {
+    const getChapter = async () => {
+      const chapter = await axios.get(
+        `/api/chapter?id=${chapterId}&courseId=${courseId}`,
+      );
+      const parsedChapter = getChapterSchema.parse(chapter.data);
+      setChapter(parsedChapter);
+      return parsedChapter;
+    };
+
     if (chapterId.length > 0) {
       getChapter()
-        .then((data) => {
-          console.log(data);
+        .then((_data) => {
           setIsLoading(false);
         })
-        .catch((error) => {
+        .catch((_error) => {
           setIsLoading(false);
         })
         .finally(() => {
@@ -80,7 +78,9 @@ const Course = ({
     if (chapterId.length === 0) {
       setIsLoading(false);
     }
-  }, [chapterId]);
+  }, [chapterId, courseId]);
+
+  const userHasThisCourse = isUserCourseCreator || hasUserBoughtThisCourse;
 
   return (
     <main className="w-[100vw]">
@@ -151,17 +151,23 @@ const Course = ({
               />
             ) : isLoading ? (
               <Loader2 className="mr-2 mt-20 h-12 w-12 animate-spin text-lime-900" />
-            ) : !hasUserBoughtThisCourse ? (
+            ) : !userHasThisCourse ? (
               <div>
                 <h3 className="text-xl">Course Preview</h3>
                 <h3 className="text-xl">
                   Price:{coursePrice === "0" ? "Free" : coursePrice + " USD"}
                 </h3>
-                <video
-                  src={coursePreview}
-                  controls
-                  className="mt-6 max-h-[900px] w-[90vw] md:w-auto"
-                />
+                {coursePreview ? (
+                  <video
+                    src={coursePreview}
+                    controls
+                    className="mt-6 max-h-[900px] w-[90vw] md:w-auto"
+                  />
+                ) : (
+                  <h3 className="flex h-[400px] w-[100%] items-center justify-center text-3xl font-semibold text-gray-400">
+                    No course preview
+                  </h3>
+                )}
               </div>
             ) : (
               ""
@@ -229,5 +235,3 @@ const Course = ({
     </main>
   );
 };
-
-export default Course;

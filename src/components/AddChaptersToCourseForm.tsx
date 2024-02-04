@@ -1,5 +1,4 @@
 "use client";
-
 import { addChaptersToCourse } from "@/actions";
 import {
   Card,

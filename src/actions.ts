@@ -8,6 +8,7 @@ import { ZodError } from "zod";
 import { addChaptersToCourseSchema } from "./schemas/addChaptersToCourseSchema";
 
 export async function createCourse(formData: FormData) {
+  "use server";
   try {
     const session = await getServerAuthSession();
 
@@ -46,6 +47,7 @@ export async function createCourse(formData: FormData) {
 }
 
 export async function addChaptersToCourse(formData: FormData) {
+  "use server";
   try {
     const name = formData.get("name") as string;
     const desc = formData.get("desc") as string;
