@@ -1,14 +1,14 @@
 import { getChapterSchema } from "@/schemas/getChapterSchema";
 import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
-import { NextResponse } from "next/server";
+import { ZodError } from "zod";
 
 export async function GET(req: Request) {
   try {
     const session = await getServerAuthSession();
 
     if (!session) {
-      return new NextResponse("not logged in");
+      return new Response("not logged in");
     }
 
     const url = new URL(req.url);
@@ -43,17 +43,20 @@ export async function GET(req: Request) {
         userWithCourse.coursesBought.length > 0
       ) {
         if (getChapterSchema.parse(chapter)) {
-          return new NextResponse(JSON.stringify(chapter));
+          return new Response(JSON.stringify(chapter));
         }
 
         return new Error("Zod error");
       }
     }
 
-    return new NextResponse(
+    return new Response(
       JSON.stringify({ message: "You haven't bought this course" }),
     );
   } catch (error) {
-    console.log(error);
+    if (error instanceof ZodError)
+      return new Response("invalid request data passed", { status: 422 });
+
+    return new Response("could not fetch new posts", { status: 500 });
   }
 }
