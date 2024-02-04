@@ -20,11 +20,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UploadButton } from "@/utils/uploadthing";
+import { UploadButton } from "@/lib/uploadthing";
 import { Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "./ui/use-toast";
+import "@uploadthing/react/styles.css";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -166,10 +167,6 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
               {videoUrl ? (
                 <div className="relative ">
                   <video src={videoUrl} width="400" controls />
-                </div>
-              ) : isUploading ? (
-                <div className="flex items-center justify-center">
-                  <Loader2 className=" animate-spin " size={30} />
                 </div>
               ) : (
                 ""
