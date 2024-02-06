@@ -56,7 +56,6 @@ const SubmitButton = () => {
 export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [videoUrl, setVideoUrl] = useState<string>("");
-  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -133,19 +132,14 @@ export const AddChaptersToCourseForm = ({ courseId }: { courseId: string }) => {
                   <div className="flex flex-col items-center justify-between ">
                     <UploadButton
                       endpoint="videoUploader"
-                      onUploadBegin={() => {
-                        setIsUploading(true);
-                      }}
                       onClientUploadComplete={(res) => {
                         console.log("Files: ", res);
-                        setIsUploading(false);
                         if (res[0]?.url) {
                           setVideoUrl(res[0].url);
                         }
                         alert("Upload Completed");
                       }}
                       onUploadError={(error: Error) => {
-                        setIsUploading(false);
                         alert(`ERROR! ${error.message}`);
                       }}
                     />

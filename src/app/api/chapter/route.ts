@@ -45,8 +45,6 @@ export async function GET(req: Request) {
         if (getChapterSchema.parse(chapter)) {
           return new Response(JSON.stringify(chapter));
         }
-
-        return new Error("Zod error");
       }
     }
 
