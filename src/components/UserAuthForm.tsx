@@ -25,6 +25,7 @@ export const UserAuthForm = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <div className={cn("flex justify-center")}>
       {isLoading ? (

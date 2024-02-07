@@ -11,6 +11,9 @@ const AddChaptersPage = async ({
   };
 }) => {
   const session = await getServerAuthSession();
+  if (!session) {
+    return redirect("/sign-up");
+  }
 
   const course = await db.course.findUnique({
     where: { id: params.courseId },
