@@ -44,7 +44,8 @@ export const Course = ({
   const [chapterId, setChapterId] = useState<string>("");
   const [isFirst, setIsFirst] = useState<boolean>(true);
   const [chapter, setChapter] = useState<z.infer<typeof getChapterSchema>>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const userHasThisCourse = isUserCourseCreator || hasUserBoughtThisCourse;
 
   useEffect(() => {
     if (isFirst && chapters[0]) {
@@ -54,33 +55,26 @@ export const Course = ({
 
   useEffect(() => {
     const getChapter = async () => {
+      setIsLoading(true);
       const chapter = await axios.get(
         `/api/chapter?id=${chapterId}&courseId=${courseId}`,
       );
       const parsedChapter = getChapterSchema.parse(chapter.data);
       setChapter(parsedChapter);
+      setIsLoading(false);
       return parsedChapter;
     };
 
     if (chapterId.length > 0) {
       getChapter()
-        .then((_data) => {
-          setIsLoading(false);
-        })
-        .catch((_error) => {
-          setIsLoading(false);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+        .then((_data) => {})
+        .catch((_error) => {});
     }
 
-    if (chapterId.length === 0) {
+    if (chapterId.length === 0 || !userHasThisCourse) {
       setIsLoading(false);
     }
   }, [chapterId, courseId]);
-
-  const userHasThisCourse = isUserCourseCreator || hasUserBoughtThisCourse;
 
   return (
     <main className="w-[100vw]">
@@ -155,7 +149,7 @@ export const Course = ({
               <div>
                 <h3 className="text-xl">Course Preview</h3>
                 <h3 className="text-xl">
-                  Price:{coursePrice === "0" ? "Free" : coursePrice + " USD"}
+                  Price: {coursePrice === "0" ? "Free" : coursePrice + " USD"}
                 </h3>
                 {coursePreview ? (
                   <video
