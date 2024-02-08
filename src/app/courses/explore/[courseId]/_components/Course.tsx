@@ -12,7 +12,7 @@ import { getChapterSchema } from "@/schemas/getChapterSchema";
 import axios from "axios";
 import { Loader2, NotebookPen, PlayCircle } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import type * as z from "zod";
 
@@ -41,7 +41,6 @@ export const Course = ({
   coursePreview: string;
   coursePrice: string;
 }) => {
-  const pathname = usePathname();
   const [chapterId, setChapterId] = useState<string>("");
   const [isFirst, setIsFirst] = useState<boolean>(true);
   const [chapter, setChapter] = useState<z.infer<typeof getChapterSchema>>();
@@ -53,7 +52,8 @@ export const Course = ({
     try {
       setIsPaymentLoading(true);
       const response = await axios.post(`/api/${courseId}/checkout`);
-      window.location.assign(response.data.url);
+      window.location.assign(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
       toast({
@@ -171,7 +171,7 @@ export const Course = ({
               <div>
                 <h3 className="text-xl">Course Preview</h3>
                 <h3 className="text-xl">
-                  Price: {coursePrice === "0" ? "Free" : coursePrice + " USD"}
+                  Price: {coursePrice === "0" ? "Free" : coursePrice + " INR"}
                 </h3>
                 {coursePreview ? (
                   <video

@@ -58,7 +58,7 @@ export async function POST(
       {
         quantity: 1,
         price_data: {
-          currency: "USD",
+          currency: "INR",
           product_data: {
             name: course.name,
           },
@@ -75,8 +75,8 @@ export async function POST(
       customer: customer.id,
       line_items,
       mode: "payment",
-      success_url: `${env.NEXTAUTH_URL}/courses/${course.id}?success=1`,
-      cancel_url: `${env.NEXTAUTH_URL}/courses/${course.id}?cancel=1`,
+      success_url: `${env.NEXTAUTH_URL}/courses/explore/${course.id}`,
+      cancel_url: `${env.NEXTAUTH_URL}/courses/explore/${course.id}`,
       metadata: {
         courseId: course.id,
         userId: session.user.id,
