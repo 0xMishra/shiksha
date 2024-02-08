@@ -110,7 +110,7 @@ export const CourseInfoCard = async ({
                 <p className="font-semibold">{completetionRate}% complete</p>
               ) : (
                 <p className="mt-4">
-                  Price: {price == 0 ? "Free" : price + "USD"}{" "}
+                  Price: {price == 0 ? "Free" : price + " USD"}{" "}
                 </p>
               )}
             </CardContent>
@@ -156,7 +156,7 @@ export const CourseInfoCard = async ({
             <CardContent className="w-[100%]">
               <p>{numberOfChapters} chapters</p>
               <p className="mt-4">
-                Price: {price == 0 ? "Free" : price + "USD"}{" "}
+                Price: {price == 0 ? "Free" : price + " USD"}{" "}
               </p>
               <p className="font-semibold">
                 Revenue: {userWithCoursesSold.revenueMade} USD
@@ -190,7 +190,7 @@ export const CourseInfoCard = async ({
         </CardHeader>
         <CardContent>
           <p>{numberOfChapters} chapters</p>
-          <p className="mt-4">Price: {price == 0 ? "Free" : price + "USD"} </p>
+          <p className="mt-4">Price: {price == 0 ? "Free" : price + " USD"} </p>
         </CardContent>
       </Card>
     </Link>

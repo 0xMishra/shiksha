@@ -17,6 +17,7 @@ const DashboardPage = async () => {
   if (!session) {
     return redirect("/sign-up");
   }
+
   const courses = await db.course.findMany();
 
   const userWithCoursesSold = await db.user.findUnique({

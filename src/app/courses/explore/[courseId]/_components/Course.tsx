@@ -6,6 +6,7 @@ import {
   DrawerContent,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { getChapterSchema } from "@/schemas/getChapterSchema";
 import axios from "axios";
@@ -45,7 +46,24 @@ export const Course = ({
   const [isFirst, setIsFirst] = useState<boolean>(true);
   const [chapter, setChapter] = useState<z.infer<typeof getChapterSchema>>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
   const userHasThisCourse = isUserCourseCreator || hasUserBoughtThisCourse;
+
+  const handlePayment = async () => {
+    try {
+      setIsPaymentLoading(true);
+      const response = await axios.post(`/api/${courseId}/checkout`);
+      window.location.assign(response.data.url);
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: "something went wrong",
+      });
+    } finally {
+      setIsPaymentLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (isFirst && chapters[0]) {
@@ -129,9 +147,13 @@ export const Course = ({
               <Button variant={"primary"} asChild>
                 <Link href={`/`}>Browse courses</Link>
               </Button>
+            ) : isPaymentLoading ? (
+              <Button variant={"primary"} disabled>
+                <Loader2 className="mr-2 animate-spin text-white" />
+              </Button>
             ) : (
-              <Button variant={"primary"} asChild>
-                <Link href={`${pathname}/buy`}>Buy course</Link>
+              <Button variant={"primary"} onClick={handlePayment}>
+                Buy Course
               </Button>
             )}
           </div>

@@ -69,7 +69,7 @@ const CourseIdPage = async ({
     isUserCourseCreator = true;
   }
 
-  const coursePrice = course?.price ? course?.price.toString() : "";
+  const coursePrice = course?.price ? course?.price.toString() : "0";
 
   return (
     <Course
