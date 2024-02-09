@@ -58,6 +58,14 @@ export async function POST(req: Request) {
           },
         },
       });
+
+      await db.user.update({
+        where:{
+          id:userId
+        },data:{
+          revenueMade:{increment:course.price}
+        }
+      })
     }
   } else {
     return new Response("webhook unhandeled event" + event);

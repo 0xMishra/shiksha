@@ -12,7 +12,6 @@ import { getChapterSchema } from "@/schemas/getChapterSchema";
 import axios from "axios";
 import { Loader2, NotebookPen, PlayCircle } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import type * as z from "zod";
 

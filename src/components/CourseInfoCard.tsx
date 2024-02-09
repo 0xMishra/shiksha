@@ -133,6 +133,20 @@ export const CourseInfoCard = async ({
       },
     });
 
+    const peopleWhoBoughtThisCourse = await db.course.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        boughtBy: true,
+      },
+    });
+
+    let revenueMade = 0;
+    if (peopleWhoBoughtThisCourse?.boughtBy) {
+      revenueMade = price * peopleWhoBoughtThisCourse?.boughtBy.length;
+    }
+
     if (userWithCoursesSold?.coursesCreated.length) {
       return (
         <Link href={`/courses/explore/${id}`} className="">
@@ -158,9 +172,7 @@ export const CourseInfoCard = async ({
               <p className="mt-4">
                 Price: {price == 0 ? "Free" : price + " INR"}{" "}
               </p>
-              <p className="font-semibold">
-                Revenue: {userWithCoursesSold.revenueMade} INR
-              </p>
+              <p className="font-semibold">Revenue: {revenueMade} INR</p>
             </CardContent>
           </Card>
         </Link>
