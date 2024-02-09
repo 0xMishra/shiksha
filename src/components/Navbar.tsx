@@ -2,7 +2,6 @@ import { getServerAuthSession } from "@/server/auth";
 import { AuthButton } from "./AuthButton";
 import { Logo } from "./Logo";
 import { NavbarMenu } from "./NavbarMenu";
-import { Searchbar } from "./Searchbar";
 import { UserAccountNav } from "./UserAccountNav";
 
 export const Navbar = async () => {
@@ -16,9 +15,6 @@ export const Navbar = async () => {
             <Logo />
           </div>
           <NavbarMenu />
-          <div className="hidden md:flex">
-            <Searchbar />
-          </div>
           <div>
             {session ? <UserAccountNav session={session} /> : <AuthButton />}
           </div>
