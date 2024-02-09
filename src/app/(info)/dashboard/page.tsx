@@ -33,6 +33,23 @@ const DashboardPage = async () => {
     },
   });
 
+  const coursesSoldByUser = await db.course.findMany({
+    where: {
+      creatorId: session.user.id,
+    },
+    include: {
+      boughtBy: true,
+    },
+  });
+
+  let revenueMade = 0;
+
+  if (coursesSoldByUser.length > 0) {
+    coursesSoldByUser.forEach((course) => {
+      revenueMade += course.price * course.boughtBy.length;
+    });
+  }
+
   let coursesInProgress = 0;
 
   if (userWithCoursesSold) {
@@ -100,9 +117,7 @@ const DashboardPage = async () => {
               <DollarSign size={30} />
               <CardHeader>
                 <CardTitle>Total revenue</CardTitle>
-                <CardDescription>
-                  {/* {userWithCoursesSold?.revenueMade} INR */}
-                </CardDescription>
+                <CardDescription>{revenueMade} INR</CardDescription>
               </CardHeader>
             </Card>
           </div>

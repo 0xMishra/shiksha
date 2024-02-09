@@ -83,8 +83,8 @@ export async function POST(
       customer: customer.id,
       line_items,
       mode: "payment",
-      success_url: `${env.NEXTAUTH_URL}/courses/explore/${course.id}`,
-      cancel_url: `${env.NEXTAUTH_URL}/courses/explore/${course.id}`,
+      success_url: `${env.NEXT_APP_URL}/courses/explore/${course.id}`,
+      cancel_url: `${env.NEXT_APP_URL}/courses/explore/${course.id}`,
       metadata: {
         courseId: course.id,
         userId: session.user.id,

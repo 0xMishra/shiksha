@@ -33,6 +33,7 @@ export const env = createEnv({
     UPLOADTHING_SECRET: z.string(),
     UPLOADTHING_APP_ID: z.string(),
     STRIPE_API_KEY: z.string(),
+    NEXT_APP_URL: z.string(),
   },
 
   /**
@@ -58,6 +59,7 @@ export const env = createEnv({
     UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
     UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
+    NEXT_APP_URL: process.env.NEXT_APP_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
