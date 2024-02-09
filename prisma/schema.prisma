@@ -54,7 +54,6 @@ model User {
   coursesBought     Course[]  @relation("CourseBoughtBy")
   chaptersCompleted Chapter[]
   coursesCompleted  Course[]
-  revenueMade       Int       @default(0)
 }
 
 model VerificationToken {

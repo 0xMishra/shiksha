@@ -17,20 +17,24 @@ export async function POST(
   try {
     const session = await getServerAuthSession();
 
+    console.log("error 1");
     if (!session) {
       return new Response("Not authorized", { status: 401 });
     }
 
+    console.log("error 2");
     const course = await db.course.findUnique({
       where: {
         id: params.courseId,
       },
     });
 
+    console.log("error 3");
     if (!course) {
       return new Response("course not found", { status: 404 });
     }
 
+    console.log("error 4");
     const userWithCourse = await db.user.findUnique({
       where: {
         id: session.user.id,
@@ -44,12 +48,14 @@ export async function POST(
       },
     });
 
+    console.log("error 5");
     let hasPurchased = false;
 
     if (userWithCourse) {
       hasPurchased = userWithCourse?.coursesBought.length > 0;
     }
 
+    console.log("error 6");
     if (hasPurchased) {
       return new Response("already purchased ", { status: 400 });
     }
@@ -67,10 +73,12 @@ export async function POST(
       },
     ];
 
+    console.log("error 7");
     const customer = await stripe.customers.create({
       email: session?.user.email?.toString(),
     });
 
+    console.log("error 8");
     const stripeSession = await stripe.checkout.sessions.create({
       customer: customer.id,
       line_items,
@@ -83,6 +91,7 @@ export async function POST(
       },
     });
 
+    console.log("error 9");
     return new Response(stripeSession.url?.toString(), { status: 200 });
   } catch (error) {
     console.log(error);

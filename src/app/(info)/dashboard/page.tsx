@@ -101,7 +101,7 @@ const DashboardPage = async () => {
               <CardHeader>
                 <CardTitle>Total revenue</CardTitle>
                 <CardDescription>
-                  {userWithCoursesSold?.revenueMade} INR
+                  {/* {userWithCoursesSold?.revenueMade} INR */}
                 </CardDescription>
               </CardHeader>
             </Card>
