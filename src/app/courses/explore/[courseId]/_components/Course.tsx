@@ -107,9 +107,7 @@ export const Course = ({
 
     if (chapterId.length > 0) {
       getChapter()
-        .then((data) => {
-          console.log(data);
-        })
+        .then((_data) => {})
         .catch((_error) => {});
     }
 
@@ -222,9 +220,9 @@ export const Course = ({
               <Loader2 className="mr-2 mt-20 h-12 w-12 animate-spin text-lime-900" />
             ) : !userHasThisCourse ? (
               <div className="">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <h3 className="text-xl">Course Preview</h3>
-                  <h3 className="text-xl">
+                  <h3 className="ml-2 text-xl">
                     Price: {coursePrice === "0" ? "Free" : coursePrice + " INR"}
                   </h3>
                 </div>
