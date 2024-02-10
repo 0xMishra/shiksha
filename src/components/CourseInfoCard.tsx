@@ -72,10 +72,9 @@ export const CourseInfoCard = async ({
           userWithCompletedChapters?.chaptersCompleted.length;
       }
 
-      const allChapters = await db.course.findMany({
-        where: { id: id },
-        include: {
-          chapters: true,
+      const allChapters = await db.chapter.findMany({
+        where: {
+          courseId: id,
         },
       });
 

@@ -49,11 +49,11 @@ export const UserAccountNav = ({ session }: { session: Session }) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="text-lg font-semibold text-gray-600"
+            className="text-lg  text-gray-600"
             onClick={() => router.push("/dashboard")}
           >
             <div className="flex items-center ">
-              <Notebook className="text-gray-600" />
+              <Notebook className="text-gray-600" color="gray" />
               <div className=" relative -top-1 ml-2 text-center text-lg ">
                 my courses
               </div>
@@ -61,9 +61,9 @@ export const UserAccountNav = ({ session }: { session: Session }) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => signOutWithGoogle()}
-            className="text-lg font-semibold text-gray-600"
+            className="text-lg  text-gray-600"
           >
-            <LogOut className=" text-gray-600" />
+            <LogOut className=" text-gray-600" color="gray" />
             <div className=" relative -top-1 ml-2 cursor-pointer text-center  ">
               sign out
             </div>

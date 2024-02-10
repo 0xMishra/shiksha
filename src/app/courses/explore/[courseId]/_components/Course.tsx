@@ -54,6 +54,8 @@ export const Course = ({
   const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
   const userHasThisCourse = isUserCourseCreator || hasUserBoughtThisCourse;
   const [isChapterCompleted, setIsChapterCompleted] = useState<boolean>(false);
+  const [markCompleteLoading, setMarkCompleteLoading] =
+    useState<boolean>(false);
 
   const handlePayment = async () => {
     try {
@@ -73,7 +75,15 @@ export const Course = ({
   };
 
   const markComplete = async () => {
+    setMarkCompleteLoading(true);
     await axios.get(`/api/${courseId}/mark-complete?id=${chapter?.id}`);
+    const fetchedChapter = await axios.get(
+      `/api/chapter?id=${chapterId}&courseId=${courseId}`,
+    );
+    const parsedChapter = getChapterSchema.parse(fetchedChapter.data);
+    setIsChapterCompleted(parsedChapter.isCompleted);
+    setChapter(parsedChapter);
+    setMarkCompleteLoading(false);
   };
 
   useEffect(() => {
@@ -168,10 +178,16 @@ export const Course = ({
                 <Button variant={"primary"} asChild>
                   <Link href={`/`}>Browse courses</Link>
                 </Button>
-                {isLoading ? (
-                  ""
-                ) : isChapterCompleted ? (
+                {isChapterCompleted ? (
                   <p className="font-semibold text-lime-900 ">completed</p>
+                ) : markCompleteLoading ? (
+                  <Button
+                    variant={"ghost"}
+                    className="rounded-md border-[1px] border-solid border-lime-900 bg-white font-semibold text-lime-900 hover:text-lime-900  "
+                    disabled
+                  >
+                    <Loader2 className="mr-2 animate-spin text-lime-900" />
+                  </Button>
                 ) : (
                   <Button
                     variant={"ghost"}
@@ -230,7 +246,7 @@ export const Course = ({
         <div className="md:hidden">
           <Drawer>
             <div className="flex items-center justify-center">
-              <DrawerTrigger className="m-4 my-4 mt-10  flex w-[40vw] items-center justify-center space-x-2 border-[1px] border-solid border-gray-800 py-2 text-center text-lime-900 transition-all  hover:bg-lime-900/90 hover:text-white md:hidden">
+              <DrawerTrigger className="m-4 my-4 mt-10  flex w-[70vw] items-center justify-center space-x-2 border-[1px] border-solid border-gray-800 py-2 text-center text-lime-900 transition-all  hover:bg-lime-900/90 hover:text-white md:hidden">
                 <NotebookPen size={30} />
                 <p className="text-xl font-semibold ">Show chapters</p>
               </DrawerTrigger>
