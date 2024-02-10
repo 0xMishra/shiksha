@@ -165,7 +165,7 @@ export const Course = ({
         </div>
 
         <section className="mt-4 flex flex-col items-center justify-center p-4 md:ml-64 md:w-[100vw] md:pr-72 ">
-          <div className="flex w-[90vw] items-center justify-between gap-2 md:w-[100%]">
+          <div className="flex w-[90vw] flex-col items-center justify-between gap-2 md:w-[100%] lg:flex-row">
             <h2 className="text-2xl font-semibold">{courseName}</h2>
             {isUserCourseCreator ? (
               <Button variant={"primary"} asChild>
@@ -174,7 +174,7 @@ export const Course = ({
                 </Link>
               </Button>
             ) : hasUserBoughtThisCourse ? (
-              <div className="relative top-6 flex flex-col items-center justify-center gap-2 md:top-0 md:flex-row">
+              <div className=" mt-4 flex items-center justify-center gap-2 md:top-0 md:flex-row">
                 <Button variant={"primary"} asChild>
                   <Link href={`/`}>Browse courses</Link>
                 </Button>
@@ -188,7 +188,7 @@ export const Course = ({
                   >
                     <Loader2 className="mr-2 animate-spin text-lime-900" />
                   </Button>
-                ) : (
+                ) : chapter?.id ? (
                   <Button
                     variant={"ghost"}
                     className="rounded-md border-[1px] border-solid border-lime-900 bg-white font-semibold text-lime-900 hover:text-lime-900  "
@@ -196,6 +196,8 @@ export const Course = ({
                   >
                     Mark complete
                   </Button>
+                ) : (
+                  ""
                 )}
               </div>
             ) : isPaymentLoading ? (
@@ -219,11 +221,13 @@ export const Course = ({
             ) : isLoading ? (
               <Loader2 className="mr-2 mt-20 h-12 w-12 animate-spin text-lime-900" />
             ) : !userHasThisCourse ? (
-              <div>
-                <h3 className="text-xl">Course Preview</h3>
-                <h3 className="text-xl">
-                  Price: {coursePrice === "0" ? "Free" : coursePrice + " INR"}
-                </h3>
+              <div className="">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl">Course Preview</h3>
+                  <h3 className="text-xl">
+                    Price: {coursePrice === "0" ? "Free" : coursePrice + " INR"}
+                  </h3>
+                </div>
                 {coursePreview ? (
                   <video
                     src={coursePreview}
