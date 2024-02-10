@@ -107,7 +107,9 @@ export const CourseInfoCard = async ({
             <CardContent>
               <p>{numberOfChapters} chapters</p>
               {userWithCoursesBought?.coursesBought.length ? (
-                <p className="font-semibold">{completetionRate}% complete</p>
+                <p className="font-semibold">
+                  {Math.floor(completetionRate)}% complete
+                </p>
               ) : (
                 <p className="mt-4">
                   Price: {price == 0 ? "Free" : price + " INR"}{" "}

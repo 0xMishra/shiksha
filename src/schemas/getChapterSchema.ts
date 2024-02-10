@@ -6,4 +6,5 @@ export const getChapterSchema = z.object({
   description: z.string(),
   videoUrl: z.string(),
   courseId: z.string(),
+  isCompleted: z.boolean(),
 });

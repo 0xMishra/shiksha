@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -10,7 +11,13 @@ import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { getChapterSchema } from "@/schemas/getChapterSchema";
 import axios from "axios";
-import { Loader2, NotebookPen, PlayCircle } from "lucide-react";
+import {
+  CheckCircle2,
+  Loader2,
+  NotebookPen,
+  Pause,
+  PlayCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type * as z from "zod";
@@ -46,6 +53,7 @@ export const Course = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
   const userHasThisCourse = isUserCourseCreator || hasUserBoughtThisCourse;
+  const [isChapterCompleted, setIsChapterCompleted] = useState<boolean>(false);
 
   const handlePayment = async () => {
     try {
@@ -64,6 +72,10 @@ export const Course = ({
     }
   };
 
+  const markComplete = async () => {
+    await axios.get(`/api/${courseId}/mark-complete?id=${chapter?.id}`);
+  };
+
   useEffect(() => {
     if (isFirst && chapters[0]) {
       setChapterId(chapters[0]?.id);
@@ -77,6 +89,7 @@ export const Course = ({
         `/api/chapter?id=${chapterId}&courseId=${courseId}`,
       );
       const parsedChapter = getChapterSchema.parse(chapter.data);
+      setIsChapterCompleted(parsedChapter.isCompleted);
       setChapter(parsedChapter);
       setIsLoading(false);
       return parsedChapter;
@@ -84,7 +97,9 @@ export const Course = ({
 
     if (chapterId.length > 0) {
       getChapter()
-        .then((_data) => {})
+        .then((data) => {
+          console.log(data);
+        })
         .catch((_error) => {});
     }
 
@@ -120,7 +135,13 @@ export const Course = ({
                       extraClasses,
                     )}
                   >
-                    <PlayCircle size={30} />
+                    {isChapterCompleted ? (
+                      <CheckCircle2 size={30} />
+                    ) : chapter.id === chapterId ? (
+                      <Pause size={30} />
+                    ) : (
+                      <PlayCircle size={30} />
+                    )}
                     <p>{chapter.name}</p>
                   </div>
                 );
@@ -143,9 +164,22 @@ export const Course = ({
                 </Link>
               </Button>
             ) : hasUserBoughtThisCourse ? (
-              <Button variant={"primary"} asChild>
-                <Link href={`/`}>Browse courses</Link>
-              </Button>
+              <div className="relative top-6 flex flex-col items-center justify-center gap-2 md:top-0 md:flex-row">
+                <Button variant={"primary"} asChild>
+                  <Link href={`/`}>Browse courses</Link>
+                </Button>
+                {isChapterCompleted ? (
+                  <p className="font-semibold text-lime-900 ">completed</p>
+                ) : (
+                  <Button
+                    variant={"ghost"}
+                    className="rounded-md border-[1px] border-solid border-lime-900 bg-white font-semibold text-lime-900 hover:text-lime-900  "
+                    onClick={markComplete}
+                  >
+                    Mark complete
+                  </Button>
+                )}
+              </div>
             ) : isPaymentLoading ? (
               <Button variant={"primary"} disabled>
                 <Loader2 className="mr-2 animate-spin text-white" />
@@ -187,16 +221,14 @@ export const Course = ({
             ) : (
               ""
             )}
-            <p className="mt-6 text-xl font-semibold text-gray-600">
-              {chapter?.description}
-            </p>
+            <p className="mt-6 text-xl text-gray-600">{chapter?.description}</p>
           </div>
         </section>
 
         <div className="md:hidden">
           <Drawer>
             <div className="flex items-center justify-center">
-              <DrawerTrigger className="m-4 my-4 mt-10  flex w-[100vw] items-center justify-center space-x-2 border-[1px] border-solid border-gray-800 py-2 text-center text-lime-900 transition-all  hover:bg-lime-900/90 hover:text-white md:hidden">
+              <DrawerTrigger className="m-4 my-4 mt-10  flex w-[40vw] items-center justify-center space-x-2 border-[1px] border-solid border-gray-800 py-2 text-center text-lime-900 transition-all  hover:bg-lime-900/90 hover:text-white md:hidden">
                 <NotebookPen size={30} />
                 <p className="text-xl font-semibold ">Show chapters</p>
               </DrawerTrigger>
@@ -227,7 +259,13 @@ export const Course = ({
                               extraClasses,
                             )}
                           >
-                            <PlayCircle size={30} />
+                            {isChapterCompleted ? (
+                              <CheckCircle2 size={30} />
+                            ) : chapter.id === chapterId ? (
+                              <Pause size={30} />
+                            ) : (
+                              <PlayCircle size={30} />
+                            )}
                             <p>{chapter.name}</p>
                           </div>
                         );
