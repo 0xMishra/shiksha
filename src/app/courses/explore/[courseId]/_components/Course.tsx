@@ -168,7 +168,9 @@ export const Course = ({
                 <Button variant={"primary"} asChild>
                   <Link href={`/`}>Browse courses</Link>
                 </Button>
-                {isChapterCompleted ? (
+                {isLoading ? (
+                  ""
+                ) : isChapterCompleted ? (
                   <p className="font-semibold text-lime-900 ">completed</p>
                 ) : (
                   <Button

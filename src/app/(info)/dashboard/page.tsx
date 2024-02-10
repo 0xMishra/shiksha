@@ -28,8 +28,16 @@ const DashboardPage = async () => {
           creator: session?.user,
         },
       },
-      coursesCompleted: true,
-      coursesBought: true,
+      coursesBought: {
+        include: {
+          chapters: true,
+        },
+      },
+      chaptersCompleted: {
+        include: {
+          course: true,
+        },
+      },
     },
   });
 
@@ -52,10 +60,37 @@ const DashboardPage = async () => {
 
   let coursesInProgress = 0;
 
+  let numberOfCompletedCourses = 0;
+
+  // to calculate total numbers of completed courses
+  if (
+    userWithCoursesSold?.coursesBought &&
+    userWithCoursesSold.chaptersCompleted
+  ) {
+    if (
+      userWithCoursesSold.coursesBought.length > 0 &&
+      userWithCoursesSold.chaptersCompleted.length > 0
+    ) {
+      userWithCoursesSold.coursesBought.forEach((course) => {
+        if (course.chapters.length > 0) {
+          const allChaptersCompleted = course.chapters.every((chapter) => {
+            return userWithCoursesSold.chaptersCompleted.some(
+              (completedChapter) => completedChapter.id === chapter.id,
+            );
+          });
+
+          if (allChaptersCompleted) {
+            numberOfCompletedCourses++;
+          }
+        }
+      });
+    }
+  }
+
+  // total numbers of course in progress
   if (userWithCoursesSold) {
     coursesInProgress =
-      userWithCoursesSold?.coursesBought.length -
-      userWithCoursesSold?.coursesCompleted.length;
+      userWithCoursesSold?.coursesBought.length - numberOfCompletedCourses;
   }
 
   return (
@@ -80,7 +115,7 @@ const DashboardPage = async () => {
               <CardHeader>
                 <CardTitle>Completed</CardTitle>
                 <CardDescription>
-                  {userWithCoursesSold?.coursesCompleted.length} courses
+                  {numberOfCompletedCourses} courses
                 </CardDescription>
               </CardHeader>
             </Card>

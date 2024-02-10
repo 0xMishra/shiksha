@@ -56,8 +56,8 @@ export const CourseInfoCard = async ({
 
       let totalChapters = 0;
 
-      const completedChapters = await db.user.findUnique({
-        where: { id: id },
+      const userWithCompletedChapters = await db.user.findUnique({
+        where: { id: session.user.id },
         include: {
           chaptersCompleted: {
             where: {
@@ -67,8 +67,9 @@ export const CourseInfoCard = async ({
         },
       });
 
-      if (completedChapters) {
-        completetedChapters = completedChapters?.chaptersCompleted.length;
+      if (userWithCompletedChapters) {
+        completetedChapters =
+          userWithCompletedChapters?.chaptersCompleted.length;
       }
 
       const allChapters = await db.course.findMany({
@@ -80,7 +81,7 @@ export const CourseInfoCard = async ({
 
       totalChapters = allChapters.length;
 
-      if (!totalChapters) {
+      if (totalChapters > 0) {
         completetionRate = (completetedChapters / totalChapters) * 100;
       }
 
