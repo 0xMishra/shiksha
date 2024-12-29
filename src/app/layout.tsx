@@ -5,6 +5,7 @@ import { type Metadata } from "next";
 import { Toaster } from "~/components/ui/toaster";
 import { ThemeProvider } from "~/components/theme-provider";
 import { Navbar } from "~/components/Navbar";
+import { SidebarRenderer } from "~/components/SidebarRenderer";
 
 export const metadata: Metadata = {
   title: "Shiksha",
@@ -24,6 +25,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <SidebarRenderer />
           <Navbar />
           {children}
           <Toaster />

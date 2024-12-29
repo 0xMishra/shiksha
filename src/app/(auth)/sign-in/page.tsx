@@ -19,7 +19,7 @@ const signinPage = async () => {
             </span>
           </h1>
           <p className="mx-auto max-w-xs pb-4 pt-4 text-center text-lg font-light text-gray-400">
-            By continuing you are setting up a Credit account and agree to our
+            By continuing you are setting up a Shiksha account and agree to our
             User agreement and Privacy Policy
           </p>
 
