@@ -31,6 +31,7 @@ async function HomePage() {
             const { id, name, image, price, creator } = course;
             return (
               <CourseCard
+                id={id}
                 key={id}
                 name={name}
                 image={image}
