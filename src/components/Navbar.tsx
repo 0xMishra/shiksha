@@ -15,7 +15,7 @@ export const Navbar = async () => {
   const session = await getAuthSession();
   if (session?.user) {
     return (
-      <div className="fixed top-0 z-[5] flex w-screen items-center justify-center border-b-[2px] border-solid border-gray-800 bg-black p-3 md:ml-3">
+      <div className="fixed top-0 z-[5] flex w-screen items-center justify-center border-b-[2px] border-solid border-gray-800 bg-accent p-3 md:ml-6 lg:ml-0">
         <div className="flex w-[90vw] max-w-[700px] items-center justify-between">
           <h1 className="bg-gradient-to-b from-blue-400 to-blue-700 bg-clip-text pl-2 pr-1 text-3xl font-black tracking-tighter text-transparent">
             Shiksha
@@ -39,9 +39,23 @@ export const Navbar = async () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : session && session.user.name ? (
-                <AvatarFallback>
-                  {session.user.name[0]?.toUpperCase()}
-                </AvatarFallback>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <AvatarFallback>
+                      {session.user.name[0]?.toUpperCase()}
+                    </AvatarFallback>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                    <DropdownMenuItem>Billing</DropdownMenuItem>
+                    <DropdownMenuItem>Team</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <LogoutButton />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 ""
               )}
@@ -53,7 +67,7 @@ export const Navbar = async () => {
   }
 
   return (
-    <div className="fixed top-0 z-[5] flex w-screen items-center justify-center border-b-[2px] border-solid border-gray-800 bg-black p-3 md:ml-3">
+    <div className="fixed top-0 z-[5] flex w-screen items-center justify-center border-b-[2px] border-solid border-gray-800 bg-accent p-3 md:ml-3">
       <div className="flex w-[90vw] max-w-[700px] items-center justify-between">
         <h1 className="bg-gradient-to-b from-blue-400 to-blue-700 bg-clip-text pl-2 pr-1 text-3xl font-black tracking-tighter text-transparent">
           Shiksha
