@@ -14,7 +14,7 @@ export const ChapterCard = async ({
 }) => {
   return (
     <div className="w-[100%] max-w-[600px] rounded-[2px] rounded-tl-[1rem] rounded-tr-[1rem] border-[2px] border-solid border-gray-800 bg-[#171717]">
-      <Link href={`courses/${courseId}/chapters/${id}`} className="w-[100%]">
+      <Link href={`/courses/${courseId}/chapters/${id}`} className="w-[100%]">
         <Image
           src={image}
           alt="course thumbnail"

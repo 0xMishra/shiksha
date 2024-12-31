@@ -27,6 +27,13 @@ export const createChapterAction = async (
       video: videoUrl,
     });
 
+    if (!parsedInput.success) {
+      const errorType = parsedInput.error.errors[0]?.path[0];
+      console.log("error: ", errorType);
+
+      if (errorType === "name") return { msg: errorType };
+    }
+
     if (image === null) return { msg: "image" };
 
     if (!parsedInput.success) {

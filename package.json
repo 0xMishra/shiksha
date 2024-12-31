@@ -34,6 +34,7 @@
     "@radix-ui/react-toast": "^1.2.4",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@t3-oss/env-nextjs": "^0.10.1",
+    "@types/video.js": "7.3.57",
     "@uploadthing/react": "^7.1.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -49,6 +50,9 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^7.4.4",
+    "video.js": "7.18.1",
+    "videojs-contrib-quality-levels": "2.1.0",
+    "videojs-http-source-selector": "1.1.6",
     "zod": "^3.24.1"
   },
   "devDependencies": {
