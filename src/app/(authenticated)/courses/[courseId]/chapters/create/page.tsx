@@ -36,11 +36,7 @@ const createChaptersPage = async ({
     },
   });
 
-  const hasBoughtTheCourse = course?.courseBoughtBy.find(
-    (buyer) => buyer.id === session.user.id,
-  );
-
-  if (session.user.id !== course?.creatorId && !hasBoughtTheCourse) {
+  if (session.user.id !== course?.creatorId) {
     redirect("/");
   }
 
