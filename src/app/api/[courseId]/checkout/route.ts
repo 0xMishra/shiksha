@@ -9,9 +9,9 @@ export async function POST(
   {
     params,
   }: {
-    params: {
+    params: Promise<{
       courseId: string;
-    };
+    }>;
   },
 ) {
   try {
@@ -19,9 +19,10 @@ export async function POST(
     if (!session) {
       return new Response("Not authorized", { status: 401 });
     }
+    const { courseId } = await params;
     const course = await db.course.findUnique({
       where: {
-        id: params.courseId,
+        id: courseId,
       },
     });
     if (!course) {
@@ -34,7 +35,7 @@ export async function POST(
       include: {
         coursesBought: {
           where: {
-            id: params.courseId,
+            id: courseId,
           },
         },
       },
@@ -52,7 +53,6 @@ export async function POST(
         quantity: 1,
         price_data: {
           currency: "INR",
-
           product_data: {
             name: course.name,
           },
@@ -64,10 +64,13 @@ export async function POST(
     // creates a new stripe customer
     const customer = await stripe.customers.create({
       email: session?.user.email?.toString(),
+      name: session.user.name?.toString(),
+      address: "",
     });
 
     const stripeSession = await stripe.checkout.sessions.create({
-      customer: customer.id,
+      customer_email: customer.email || "", // Ensure customer email is included
+      billing_address_collection: "required",
       line_items,
       mode: "payment",
       success_url: `${env.NEXTAUTH_URL}/courses/${course.id}?success=1`,

@@ -1,34 +1,34 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
+import axios from "axios";
 import { IndianRupee, Loader2 } from "lucide-react";
-import { cn } from "~/lib/utils";
 import { useState } from "react";
+import { toast } from "~/hooks/use-toast";
+import { cn } from "~/lib/utils";
+import { Button } from "./ui/button";
 
 export function BuyCourseButton({ courseId }: { courseId: string }) {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const handleCheckout = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/${courseId}/checkout`, {
-        method: "POST",
+      const response = await axios.post(`/api/${courseId}/checkout`, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        // Redirect to Stripe Checkout page
-        router.push(data);
+      if (response.data) {
+        window.location.assign(response.data);
       } else {
-        const error = await response.json();
-        console.error("Checkout error:", error);
+        console.error("Checkout error");
       }
     } catch (err) {
       console.error("Error initiating checkout:", err);
+      toast({
+        variant: "destructive",
+        title: "something went wrong",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +45,7 @@ export function BuyCourseButton({ courseId }: { courseId: string }) {
         {isLoading ? (
           <Loader2 className="animate-spin" />
         ) : (
-          <div>
+          <div className="flex items-center justify-center space-x-2">
             <IndianRupee />
             Buy course
           </div>

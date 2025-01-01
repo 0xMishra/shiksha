@@ -15,6 +15,7 @@ async function HomePage() {
       image: true,
       price: true,
       id: true,
+      description: true,
       courseBoughtBy: {
         select: {
           id: true,
@@ -37,7 +38,15 @@ async function HomePage() {
       <div className="mb-10 flex h-screen w-screen items-start justify-center">
         <div className="relative top-20 grid w-[90vw] max-w-[1200px] grid-cols-1 place-items-center gap-8 p-4 pb-24 sm:grid-cols-2 md:ml-6 lg:grid-cols-3">
           {courses.map((course) => {
-            const { id, name, image, price, creator, courseBoughtBy } = course;
+            const {
+              id,
+              description,
+              name,
+              image,
+              price,
+              creator,
+              courseBoughtBy,
+            } = course;
 
             let buyerId = courseBoughtBy.find(
               (buyer) => buyer.id === session.user.id,
@@ -47,6 +56,7 @@ async function HomePage() {
 
             return (
               <CourseCard
+                desc={description || ""}
                 hasBoughtCourse={hasBoughtCourse}
                 creatorId={course.creator.id}
                 id={id}
