@@ -1,7 +1,7 @@
 "use client";
 import { Loader2, NotebookPen } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
-import { createChapterAction } from "~/actions/chapters";
+import { updateChapterAction } from "~/actions/chapters";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -20,13 +20,32 @@ import { VideoRenderer } from "./VideoRenderer";
 
 const initialState = null;
 
-export function CreateChapterForm({ courseId }: { courseId: string }) {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+type LocalChapter = {
+  name: string;
+  description: string | null;
+  image: string;
+  video: string;
+};
+
+export function ChapterUpdateForm({
+  courseId,
+  chapterId,
+  chapter,
+}: {
+  courseId: string;
+  chapterId: string;
+  chapter: LocalChapter;
+}) {
+  const [updateChapterData, setUpdateChapterData] =
+    useState<LocalChapter>(chapter);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    updateChapterData.image,
+  );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [videoUrl, setVideoUrl] = useState<string>(updateChapterData.video);
 
   const [state, formAction, pending] = useActionState(
-    createChapterAction,
+    updateChapterAction,
     initialState,
   );
 
@@ -76,9 +95,9 @@ export function CreateChapterForm({ courseId }: { courseId: string }) {
         style={{ backgroundColor: "#171717" }}
       >
         <CardHeader>
-          <CardTitle className="text-2xl">Create chapter</CardTitle>
+          <CardTitle className="text-2xl">{chapter.name}</CardTitle>
           <CardDescription className="text-lg">
-            Provide information about this chapter
+            Update information about this chapter
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -96,6 +115,13 @@ export function CreateChapterForm({ courseId }: { courseId: string }) {
                 <Input
                   id="name"
                   name="name"
+                  value={updateChapterData.name}
+                  onChange={(e) =>
+                    setUpdateChapterData({
+                      ...updateChapterData,
+                      name: e.target.value,
+                    })
+                  }
                   placeholder="Name of the chapter"
                 />
                 {state?.msg === "name" && (
@@ -112,6 +138,13 @@ export function CreateChapterForm({ courseId }: { courseId: string }) {
                 <Textarea
                   id="desc"
                   name="desc"
+                  value={updateChapterData.description || ""}
+                  onChange={(e) =>
+                    setUpdateChapterData({
+                      ...updateChapterData,
+                      description: e.target.value,
+                    })
+                  }
                   placeholder="description of the chapter"
                 />
               </div>
@@ -148,10 +181,19 @@ export function CreateChapterForm({ courseId }: { courseId: string }) {
                 )}
               </div>
             </div>
+
             <Input
               id="courseId"
               name="courseId"
               value={courseId}
+              readOnly
+              className="hidden"
+            />
+
+            <Input
+              id="chapterId"
+              name="chapterId"
+              value={chapterId}
               readOnly
               className="hidden"
             />
@@ -173,7 +215,7 @@ export function CreateChapterForm({ courseId }: { courseId: string }) {
                     title: "Upload successful",
                   });
 
-                  setVideoUrl(JSON.stringify(res));
+                  setVideoUrl(res[0]?.url || "");
                 }}
                 onUploadError={(error: Error) => {
                   // Do something with the error.
@@ -185,11 +227,7 @@ export function CreateChapterForm({ courseId }: { courseId: string }) {
                   });
                 }}
               />
-              {videoUrl ? (
-                <VideoRenderer src={JSON.parse(videoUrl)[0].url} />
-              ) : (
-                ""
-              )}
+              {videoUrl ? <VideoRenderer src={videoUrl} /> : ""}
             </div>
             {state?.msg === "video" && (
               <p style={{ color: "red" }}>chapter video is required</p>
@@ -210,7 +248,7 @@ export function CreateChapterForm({ courseId }: { courseId: string }) {
             ) : (
               <Button variant="white" type="submit" className="mt-6 w-24">
                 <NotebookPen />
-                Add
+                Update
               </Button>
             )}
           </form>

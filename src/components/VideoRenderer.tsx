@@ -6,7 +6,6 @@ import VideoJS from "~/components/VideoPlayer";
 
 export function VideoRenderer({ src }: { src: string }) {
   const playerRef = useRef(null);
-  console.log(src);
 
   const videoJsOptionsM3u8 = {
     fluid: true,

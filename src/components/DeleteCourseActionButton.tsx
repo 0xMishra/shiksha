@@ -34,6 +34,7 @@ export const DeleteCourseActionButton = ({
       <Button
         type="submit"
         variant={"destructive"}
+        disabled={pending}
         className={cn(
           "w-24 rounded-[0.5rem] bg-red-700 px-4 py-2 text-gray-300 hover:bg-red-900",
         )}

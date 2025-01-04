@@ -1,8 +1,11 @@
+import { CheckIcon, CircleCheckBig } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import React from "react";
+import { DeleteChapter } from "~/components/DeleteChapterActionButton";
+import { MarkChapterAsComplete } from "~/components/MarkChapterAsComplete";
+import { VideoRenderer } from "~/components/VideoRenderer";
 import { getAuthSession } from "~/server/auth/config";
 import { db } from "~/server/db";
-import { VideoRenderer } from "~/components/VideoRenderer";
 
 const chapterPage = async ({
   params,
@@ -30,11 +33,16 @@ const chapterPage = async ({
         select: {
           name: true,
           video: true,
+          chapterCompletedBy: { select: { id: true } },
         },
         where: { id: parseInt(chapterId) },
       },
     },
   });
+
+  let isChapterCompletedByUser = course?.chapters[0]?.chapterCompletedBy.find(
+    ({ id }) => id === session.user.id,
+  );
 
   const hasBoughtTheCourse = course?.courseBoughtBy.find(
     (buyer) => buyer.id === session.user.id,
@@ -45,9 +53,39 @@ const chapterPage = async ({
   }
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
+      <div className="w-[90vw] max-w-4xl items-center justify-center">
+        {session.user.id === course?.creatorId && (
+          <div className="flex w-[100%] items-center justify-between">
+            <DeleteChapter chapterId={chapterId} />
+
+            <Link
+              href={`/courses/${courseId}/chapters/${chapterId}/update`}
+              className="flex w-44 cursor-pointer items-center justify-center rounded-[0.5rem] bg-green-700 p-2 font-semibold text-white hover:bg-green-900"
+            >
+              UPDATE CHAPTER
+            </Link>
+          </div>
+        )}
+      </div>
+
       <VideoRenderer src={course?.chapters[0]?.video || ""} />
-      <div className="mt-3 flex items-center justify-start text-3xl font-semibold">
+      <div className="mt-3 flex flex-col items-center justify-center text-3xl font-semibold">
         <h3>{course?.chapters[0]?.name}</h3>
+        {hasBoughtTheCourse && (
+          <div className="mt-3 flex w-[100%] items-center justify-center">
+            {isChapterCompletedByUser ? (
+              <div className="flex w-48 cursor-pointer items-center justify-center rounded-[0.5rem] border-[2px] border-solid border-green-700 p-2 text-lg font-semibold text-green-700">
+                <CircleCheckBig className="pr-1" />
+                COMPLETED
+              </div>
+            ) : (
+              <MarkChapterAsComplete
+                courseId={courseId}
+                chapterId={chapterId}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

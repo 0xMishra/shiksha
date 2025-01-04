@@ -14,7 +14,6 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { Button } from "~/components/ui/button";
@@ -36,6 +35,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { MarkAsCompleteCourseActionButton } from "./MarkAsCompleteCourseActionButton";
+import { useRouter } from "next/navigation";
 
 type CoursesBought = {
   id: string;
@@ -51,10 +51,10 @@ type CoursesBought = {
 
 export const CoursesBoughtTable = ({
   courses,
-  coursesCompleted,
+  chaptersCompleted,
 }: {
   courses: CoursesBought[];
-  coursesCompleted: { id: string }[];
+  chaptersCompleted: { id: number }[];
 }) => {
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -150,8 +150,12 @@ export const CoursesBoughtTable = ({
       accessorKey: "isCompleted",
       header: () => <div className="text-right">Completed</div>,
       cell: ({ row }) => {
-        const courseId = row.getValue("id") as string;
-        const user = coursesCompleted.find((course) => course.id === courseId);
+        const allChapters = row.getValue("chapters");
+        // @ts-ignore
+        // if has user set all the chapters of a particular course to be completed = true then that particular course should also be completed = true
+        const user = allChapters.every((ch2) =>
+          chaptersCompleted.some((ch1) => ch1.id === ch2.id),
+        );
         let isCompleted = user ? "TRUE" : "FALSE";
 
         return (
@@ -173,8 +177,15 @@ export const CoursesBoughtTable = ({
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const course = row.original;
         const courseId = row.getValue("id") as string;
+
+        const allChapters = row.getValue("chapters");
+        // @ts-ignore
+        // if has user set all the chapters of a particular course to be completed = true then that particular course should also be completed = true
+        const user = allChapters.every((ch2) =>
+          chaptersCompleted.some((ch1) => ch1.id === ch2.id),
+        );
+        let isCompleted = user ? true : false;
 
         return (
           <DropdownMenu>
@@ -189,12 +200,11 @@ export const CoursesBoughtTable = ({
               <DropdownMenuItem className="cursor-pointer bg-blue-800 font-semibold text-white">
                 <div
                   onClick={() => {
-                    setIsOpen(true);
-                    setCourseId(courseId);
+                    router.push(`/courses/${courseId}`);
                   }}
                   className="w-[100%] cursor-pointer font-semibold text-white"
                 >
-                  MARK AS COMPLETE
+                  VIEW COURSE
                 </div>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -334,50 +344,6 @@ export const CoursesBoughtTable = ({
           </Button>
         </div>
       </div>
-      <AlertDialog
-        isOpen={isOpen}
-        courseId={courseId}
-        onClose={() => setIsOpen(false)}
-      />
     </div>
   );
 };
-
-function AlertDialog({
-  isOpen,
-  onClose,
-  courseId,
-}: {
-  isOpen: boolean;
-  courseId: string;
-  onClose: () => void;
-}) {
-  if (!isOpen) return null;
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
-      onClick={onClose}
-    >
-      <div
-        className="w-96 rounded-lg p-6 shadow-lg"
-        style={{ background: "#171717", color: "rgb(209 213 219)" }}
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the dialog
-      >
-        <h2 className="mb-4 text-lg font-semibold">Mark as complete</h2>
-        <p className="mb-1">
-          Are you sure you want to mark this course as complete?
-        </p>
-        <div className="flex justify-end space-x-2">
-          <button
-            className="rounded-[0.5rem] bg-gray-700 px-4 py-2 text-gray-300 hover:bg-gray-600"
-            onClick={onClose}
-          >
-            Close
-          </button>
-          <MarkAsCompleteCourseActionButton courseId={courseId} />
-        </div>
-      </div>
-    </div>
-  );
-}

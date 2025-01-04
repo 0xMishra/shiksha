@@ -48,7 +48,7 @@ const dashboardPage = async () => {
           },
         },
       },
-      coursesCompleted: {
+      chaptersCompleted: {
         select: { id: true },
       },
       coursesCreated: {
@@ -82,9 +82,9 @@ const dashboardPage = async () => {
     },
   ];
 
-  const coursesCompleted = userWithCourses?.coursesCompleted || [
+  const chaptersCompleted = userWithCourses?.chaptersCompleted || [
     {
-      id: "",
+      id: 0,
     },
   ];
 
@@ -108,7 +108,7 @@ const dashboardPage = async () => {
         {userWithCourses?.coursesBought.length! > 0 ? (
           <CoursesBoughtTable
             courses={coursesBought}
-            coursesCompleted={coursesCompleted}
+            chaptersCompleted={chaptersCompleted}
           />
         ) : (
           <DefaultComponent option={Option.BOUGHT} />
