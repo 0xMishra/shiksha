@@ -51,35 +51,41 @@ model VerificationToken {
 }
 
 model User {
-  id             String    @id @default(cuid())
-  name           String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  image          String?
-  accounts       Account[]
-  sessions       Session[]
-  coursesCreated Course[]  @relation(name: "courses created")
-  coursesBought  Course[]
+  id               String    @id @default(cuid())
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  image            String?
+  accounts         Account[]
+  sessions         Session[]
+  coursesCreated   Course[]  @relation(name: "courses created")
+  coursesCompleted Course[]  @relation(name: "completed by")
+  coursesBought    Course[]
 }
 
 model Course {
-  id             String    @id @default(uuid())
-  name           String
-  description    String?
-  price          Int       @default(0)
-  image          String
-  chapters       Chapter[]
-  creator        User      @relation(name: "courses created", fields: [creatorId], references: [id])
-  creatorId      String
-  courseBoughtBy User[]
+  id                String    @id @default(uuid())
+  name              String
+  description       String?
+  price             Int       @default(0)
+  image             String
+  chapters          Chapter[]
+  creator           User      @relation(name: "courses created", fields: [creatorId], references: [id])
+  creatorId         String
+  courseBoughtBy    User[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  courseCompletedBy User[]    @relation(name: "completed by")
 }
 
 model Chapter {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
   image       String
   video       String
   courseId    String
-  course      Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

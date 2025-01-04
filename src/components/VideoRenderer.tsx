@@ -41,8 +41,8 @@ export function VideoRenderer({ src }: { src: string }) {
     });
   };
   return (
-    <>
+    <div className="flex w-full items-center justify-center">
       <VideoJS options={videoJsOptionsM3u8} onReady={handlePlayerReady} />
-    </>
+    </div>
   );
 }

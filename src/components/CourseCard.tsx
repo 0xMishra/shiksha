@@ -1,4 +1,4 @@
-import { IndianRupee, ScanSearch } from "lucide-react";
+import { IndianRupee, NotebookPen, ScanSearch } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
@@ -14,6 +14,7 @@ import {
 import { cn } from "~/lib/utils";
 import { getAuthSession } from "~/server/auth/config";
 import { BuyCourseButton } from "./BuyCourseButton";
+import { EnrollInAFreeCourseButton } from "./EnrollInAFreeCourseButton";
 
 export const CourseCard = async ({
   image,
@@ -37,7 +38,7 @@ export const CourseCard = async ({
   const session = await getAuthSession();
   if (session?.user.id === creatorId || hasBoughtCourse) {
     return (
-      <div className="w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
+      <div className="h-[350px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
         <Image
           src={image}
           alt="course thumbnail"
@@ -45,7 +46,9 @@ export const CourseCard = async ({
           width={1000}
           height={1000}
         />
-        <p className="px-4 pt-2 text-2xl font-semibold">{name}</p>
+        <p className="px-4 pt-2 text-2xl font-semibold">
+          {name.length > 20 ? name.slice(0, 20) + "..." : name}
+        </p>
 
         <div className="mx-4 mb-4 mt-3 flex items-center justify-between">
           <Link href={`courses/${id}`}>
@@ -63,7 +66,7 @@ export const CourseCard = async ({
   }
 
   return (
-    <div className="w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
+    <div className="h-[350px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
       <Image
         src={image}
         alt="course thumbnail"
@@ -71,16 +74,25 @@ export const CourseCard = async ({
         width={1000}
         height={1000}
       />
-      <p className="px-4 pt-2 text-2xl font-semibold">{name}</p>
+      <p className="px-4 pt-2 text-2xl font-semibold">
+        {name.length > 20 ? name.slice(0, 20) + "..." : name}
+      </p>
       <p className="px-4 pb-2 text-xl font-semibold text-gray-400">{creator}</p>
 
       <div className="mx-4 mb-4 mt-3 flex items-center justify-between">
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant={"white"} className={cn("rounded-[2px]")}>
-              <IndianRupee />
-              Buy course
-            </Button>
+            {price === 0 ? (
+              <Button variant={"white"} className={cn("rounded-[2px]")}>
+                <NotebookPen />
+                Enroll
+              </Button>
+            ) : (
+              <Button variant={"white"} className={cn("rounded-[2px]")}>
+                <IndianRupee />
+                Buy course
+              </Button>
+            )}
           </DialogTrigger>
 
           <DialogContent
@@ -89,7 +101,11 @@ export const CourseCard = async ({
           >
             <DialogHeader>
               <DialogTitle></DialogTitle>
-              <DialogDescription>
+              <p className="px-4 pt-2 text-3xl font-semibold">{name}</p>
+              <p className="px-4 pb-3 text-xl font-semibold text-gray-400">
+                By: {creator}
+              </p>
+              <DialogDescription className="text-center">
                 <Image
                   src={image}
                   alt="course thumbnail"
@@ -97,20 +113,16 @@ export const CourseCard = async ({
                   width={1000}
                   height={1000}
                 />
-                {desc ? desc : ""}
+                <br />
+                <span className="pt-3 text-center text-xl font-semibold">
+                  {desc}
+                </span>
               </DialogDescription>
-              <p className="px-4 pt-3 text-3xl font-semibold">{name}</p>
-              <p className="px-4 pb-2 text-xl font-semibold text-gray-400">
-                By: {creator}
-              </p>
             </DialogHeader>
 
             <DialogFooter>
               {price === 0 ? (
-                <Button variant={"white"} className={cn("rounded-[2px]")}>
-                  <ScanSearch />
-                  Enroll
-                </Button>
+                <EnrollInAFreeCourseButton courseId={id} />
               ) : (
                 <BuyCourseButton courseId={id} />
               )}

@@ -1,10 +1,9 @@
 import { redirect } from "next/navigation";
-import React from "react";
-import { CreateChapterForm } from "~/components/CreateChapterForm";
+import { CourseUpdateForm } from "~/components/CourseUpdateForm";
 import { getAuthSession } from "~/server/auth/config";
 import { db } from "~/server/db";
 
-const createChaptersPage = async ({
+const courseUpdatePage = async ({
   params,
 }: {
   params: Promise<{ courseId: string }>;
@@ -21,6 +20,10 @@ const createChaptersPage = async ({
     select: {
       id: true,
       creatorId: true,
+      name: true,
+      description: true,
+      price: true,
+      image: true,
     },
   });
 
@@ -30,9 +33,9 @@ const createChaptersPage = async ({
 
   return (
     <div>
-      <CreateChapterForm courseId={courseId} />
+      <CourseUpdateForm course={course} />
     </div>
   );
 };
 
-export default createChaptersPage;
+export default courseUpdatePage;

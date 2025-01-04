@@ -60,6 +60,7 @@ export const createChapterAction = async (
     }
 
     revalidatePath("/");
+    revalidatePath("/dashboard");
   } catch (error) {
     console.log(error);
   }
