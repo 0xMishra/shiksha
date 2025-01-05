@@ -42,6 +42,7 @@ type CoursesCreated = {
   name: string;
   createdAt: Date;
   updatedAt: Date;
+  price?: number;
   courseBoughtBy: {
     id: string;
   }[];
@@ -130,6 +131,15 @@ export const CoursesCreatedTable = ({
         //@ts-ignore
         const users = row.getValue("courseBoughtBy")?.length!;
         return <div className="text-right font-medium">{users}</div>;
+      },
+    },
+    {
+      accessorKey: "price",
+      header: () => <div className="text-right">Price</div>,
+      cell: ({ row }) => {
+        //@ts-ignore
+        const price = row.getValue("price") as string;
+        return <div className="text-right font-medium">{price}</div>;
       },
     },
     {

@@ -16,6 +16,7 @@ import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
 
+import { useRouter } from "next/navigation";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -34,8 +35,6 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { MarkAsCompleteCourseActionButton } from "./MarkAsCompleteCourseActionButton";
-import { useRouter } from "next/navigation";
 
 type CoursesBought = {
   id: string;
@@ -64,8 +63,6 @@ export const CoursesBoughtTable = ({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [courseId, setCourseId] = React.useState<string>("");
 
   const columns: ColumnDef<CoursesBought>[] = [
     {
