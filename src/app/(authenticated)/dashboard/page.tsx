@@ -20,6 +20,7 @@ type CoursesCreated = {
 interface CoursesBought {
   id: string;
   name: string;
+  price?: number;
   chapters: {
     id: number;
   }[];

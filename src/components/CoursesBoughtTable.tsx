@@ -39,6 +39,7 @@ import {
 type CoursesBought = {
   id: string;
   name: string;
+  price?: number;
   chapters: {
     id: number;
   }[];
@@ -134,6 +135,25 @@ export const CoursesBoughtTable = ({
       },
     },
     {
+      accessorKey: "price",
+      header: () => <div className="text-right">Price</div>,
+      cell: ({ row }) => {
+        //@ts-ignore
+        const price = row.getValue("price") as number;
+        return (
+          <div>
+            {price === 0 ? (
+              <div className="text-right font-semibold text-green-500">
+                FREE
+              </div>
+            ) : (
+              <div className="text-right font-medium">₹{`${price}`}</div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       accessorKey: "creator",
       header: () => <div className="text-right">Creator</div>,
       cell: ({ row }) => {
@@ -175,14 +195,6 @@ export const CoursesBoughtTable = ({
       enableHiding: false,
       cell: ({ row }) => {
         const courseId = row.getValue("id") as string;
-
-        const allChapters = row.getValue("chapters");
-        // @ts-ignore
-        // if has user set all the chapters of a particular course to be completed = true then that particular course should also be completed = true
-        const user = allChapters.every((ch2) =>
-          chaptersCompleted.some((ch1) => ch1.id === ch2.id),
-        );
-        let isCompleted = user ? true : false;
 
         return (
           <DropdownMenu>

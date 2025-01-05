@@ -15,6 +15,7 @@ async function HomePage() {
       image: true,
       price: true,
       id: true,
+      chapters: { select: { id: true } },
       description: true,
       courseBoughtBy: {
         select: {
@@ -29,6 +30,11 @@ async function HomePage() {
         },
       },
     },
+  });
+
+  const userWithCoursesCompleted = await db.user.findUnique({
+    where: { id: session.user.id },
+    select: { chaptersCompleted: { select: { id: true } } },
   });
 
   let hasBoughtCourse = false;
@@ -54,8 +60,25 @@ async function HomePage() {
 
             if (buyerId) hasBoughtCourse = true;
 
+            const totalChapters = course.chapters.length;
+
+            const completedChapters = course.chapters.filter((ch2) =>
+              userWithCoursesCompleted?.chaptersCompleted.some(
+                (ch1) => ch1.id === ch2.id,
+              ),
+            ).length;
+
+            const totalBuyers = course.courseBoughtBy.length;
+            const totalRevenue = course.courseBoughtBy.length * course.price;
+
+            const completionPercentage =
+              totalChapters > 0 ? (completedChapters / totalChapters) * 100 : 0;
+
             return (
               <CourseCard
+                totalBuyers={totalBuyers}
+                totalRevenue={totalRevenue}
+                completionPercentage={Math.floor(completionPercentage)}
                 desc={description || ""}
                 hasBoughtCourse={hasBoughtCourse}
                 creatorId={course.creator.id}

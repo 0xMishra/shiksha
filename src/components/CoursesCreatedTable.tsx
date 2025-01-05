@@ -138,8 +138,32 @@ export const CoursesCreatedTable = ({
       header: () => <div className="text-right">Price</div>,
       cell: ({ row }) => {
         //@ts-ignore
-        const price = row.getValue("price") as string;
-        return <div className="text-right font-medium">{price}</div>;
+        const price = row.getValue("price") as number;
+        return (
+          <div>
+            {price === 0 ? (
+              <div className="text-right font-semibold text-green-500">
+                FREE
+              </div>
+            ) : (
+              <div className="text-right font-medium">₹{`${price}`}</div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "revenue",
+      header: () => <div className="text-right">Revenue</div>,
+      cell: ({ row }) => {
+        //@ts-ignore
+        const price = row.getValue("price") as number;
+        //@ts-ignore
+        const users = row.getValue("courseBoughtBy")?.length!;
+        const revenue = price * users;
+        return (
+          <div className="text-right font-medium">₹{revenue.toString()}</div>
+        );
       },
     },
     {

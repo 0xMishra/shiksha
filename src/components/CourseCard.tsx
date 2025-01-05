@@ -15,6 +15,7 @@ import { cn } from "~/lib/utils";
 import { getAuthSession } from "~/server/auth/config";
 import { BuyCourseButton } from "./BuyCourseButton";
 import { EnrollInAFreeCourseButton } from "./EnrollInAFreeCourseButton";
+import { CourseCompletionProgress } from "./CourseCompletionProgress";
 
 export const CourseCard = async ({
   image,
@@ -25,6 +26,9 @@ export const CourseCard = async ({
   creatorId,
   hasBoughtCourse,
   desc,
+  completionPercentage,
+  totalBuyers,
+  totalRevenue,
 }: {
   id: string;
   image: string;
@@ -34,11 +38,14 @@ export const CourseCard = async ({
   creatorId: string;
   hasBoughtCourse: boolean;
   desc: string;
+  completionPercentage: number;
+  totalBuyers: number;
+  totalRevenue: number;
 }) => {
   const session = await getAuthSession();
-  if (session?.user.id === creatorId || hasBoughtCourse) {
+  if (session?.user.id === creatorId) {
     return (
-      <div className="h-[350px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
+      <div className="h-[360px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
         <Image
           src={image}
           alt="course thumbnail"
@@ -50,9 +57,57 @@ export const CourseCard = async ({
           {name.length > 20 ? name.slice(0, 20) + "..." : name}
         </p>
 
-        <div className="mx-4 mb-4 mt-3 flex items-center justify-between">
+        <div className="mx-4 mb-4 mt-2 flex flex-col items-start justify-center">
+          <p className="mt-2 text-xl font-semibold text-white">
+            ₹{`${totalRevenue}`} Made
+          </p>
+          <p className="text-md pb-2 font-semibold text-gray-500">
+            {totalBuyers} {totalBuyers <= 1 ? "Buyer" : "Buyers"}
+          </p>
+
+          <div className="flex w-[100%] items-baseline justify-between">
+            <Link href={`courses/${id}`}>
+              <Button variant={"white"} className={cn("mt-3 rounded-[2px]")}>
+                <ScanSearch />
+                View course
+              </Button>
+            </Link>
+            <Link
+              href={`/courses/${id}/reviews`}
+              className="text-md px-4 text-gray-400 underline"
+            >
+              feedback
+            </Link>
+          </div>
+          <div>
+            <p className="text-3xl font-semibold text-gray-400"></p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (hasBoughtCourse) {
+    return (
+      <div className="h-[360px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
+        <Image
+          src={image}
+          alt="course thumbnail"
+          className="h-[200px] w-[100%] object-cover"
+          width={1000}
+          height={1000}
+        />
+        <p className="px-4 pt-2 text-2xl font-semibold">
+          {name.length > 20 ? name.slice(0, 20) + "..." : name}
+        </p>
+
+        <div className="mx-4 mb-4 mt-5 flex flex-col items-start justify-center">
+          <CourseCompletionProgress progress={completionPercentage} />
+          <p className="text-md mt-2 pb-2 font-semibold text-gray-500">
+            {completionPercentage}% completed
+          </p>
           <Link href={`courses/${id}`}>
-            <Button variant={"white"} className={cn("rounded-[2px]")}>
+            <Button variant={"white"} className={cn("mt-5 rounded-[2px]")}>
               <ScanSearch />
               View course
             </Button>
@@ -66,7 +121,7 @@ export const CourseCard = async ({
   }
 
   return (
-    <div className="h-[350px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
+    <div className="h-[360px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
       <Image
         src={image}
         alt="course thumbnail"
@@ -78,8 +133,14 @@ export const CourseCard = async ({
         {name.length > 20 ? name.slice(0, 20) + "..." : name}
       </p>
       <p className="px-4 pb-2 text-xl font-semibold text-gray-400">{creator}</p>
+      <Link
+        href={`/courses/${id}/reviews`}
+        className="text-md px-4 text-gray-400 underline"
+      >
+        reviews
+      </Link>
 
-      <div className="mx-4 mb-4 mt-3 flex items-center justify-between">
+      <div className="m-4 mt-7 flex items-center justify-between">
         <Dialog>
           <DialogTrigger asChild>
             {price === 0 ? (
@@ -102,7 +163,7 @@ export const CourseCard = async ({
             <DialogHeader>
               <DialogTitle></DialogTitle>
               <p className="px-4 pt-2 text-3xl font-semibold">{name}</p>
-              <p className="px-4 pb-3 text-xl font-semibold text-gray-400">
+              <p className="px-4 pb-5 text-xl font-semibold text-gray-400">
                 By: {creator}
               </p>
               <DialogDescription className="text-center">
