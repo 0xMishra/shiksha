@@ -21,7 +21,6 @@ async function HomePage() {
         select: {
           id: true,
         },
-        where: { id: session.user.id },
       },
       creator: {
         select: {
@@ -68,14 +67,18 @@ async function HomePage() {
               ),
             ).length;
 
-            const totalBuyers = course.courseBoughtBy.length;
-            const totalRevenue = course.courseBoughtBy.length * course.price;
+            const totalBuyers = courseBoughtBy.length;
+            console.log(price);
+            const totalRevenue = courseBoughtBy.length * price;
 
             const completionPercentage =
-              totalChapters > 0 ? (completedChapters / totalChapters) * 100 : 0;
+              totalChapters > 0
+                ? (completedChapters / totalChapters) * 100
+                : 100;
 
             return (
               <CourseCard
+                numberOfChapters={totalChapters}
                 totalBuyers={totalBuyers}
                 totalRevenue={totalRevenue}
                 completionPercentage={Math.floor(completionPercentage)}

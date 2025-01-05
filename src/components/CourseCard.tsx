@@ -29,6 +29,7 @@ export const CourseCard = async ({
   completionPercentage,
   totalBuyers,
   totalRevenue,
+  numberOfChapters,
 }: {
   id: string;
   image: string;
@@ -41,6 +42,7 @@ export const CourseCard = async ({
   completionPercentage: number;
   totalBuyers: number;
   totalRevenue: number;
+  numberOfChapters: number;
 }) => {
   const session = await getAuthSession();
   if (session?.user.id === creatorId) {
@@ -101,17 +103,23 @@ export const CourseCard = async ({
           {name.length > 20 ? name.slice(0, 20) + "..." : name}
         </p>
 
-        <div className="mx-4 mb-4 mt-5 flex flex-col items-start justify-center">
+        <div className="mx-4 mb-4 mt-6 flex flex-col items-start justify-center">
           <CourseCompletionProgress progress={completionPercentage} />
           <p className="text-md mt-2 pb-2 font-semibold text-gray-500">
             {completionPercentage}% completed
           </p>
-          <Link href={`courses/${id}`}>
-            <Button variant={"white"} className={cn("mt-5 rounded-[2px]")}>
-              <ScanSearch />
-              View course
-            </Button>
-          </Link>
+          <div className="flex w-[100%] items-baseline justify-between">
+            <Link href={`courses/${id}`}>
+              <Button variant={"white"} className={cn("mt-5 rounded-[2px]")}>
+                <ScanSearch />
+                View course
+              </Button>
+            </Link>
+            <div className="px-4 text-lg text-gray-400">
+              {`${numberOfChapters}`}{" "}
+              {numberOfChapters <= 1 ? "chapter" : "chapters"}
+            </div>
+          </div>
           <div>
             <p className="text-3xl font-semibold text-gray-400"></p>
           </div>

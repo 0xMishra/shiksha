@@ -23,6 +23,7 @@ const chaptersPage = async ({
     where: { id: courseId },
     select: {
       id: true,
+      name: true,
       creatorId: true,
       courseBoughtBy: {
         select: {
@@ -50,6 +51,9 @@ const chaptersPage = async ({
   if (course && course?.chapters.length > 0) {
     return (
       <div className="mb-10 mt-20 flex h-screen w-screen flex-col items-center justify-start">
+        <h1 className="mb-10 text-6xl font-extrabold text-gray-200 underline">
+          {course.name}
+        </h1>
         {session.user.id === course?.creatorId ? (
           <div className="relative top-4 grid w-[90vw] max-w-[1200px] p-4 pl-4 md:pl-8">
             <Link
