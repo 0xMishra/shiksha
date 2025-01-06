@@ -84,7 +84,7 @@ model CourseReview {
   id        String @id @default(uuid())
   text      String
   ratings   Int    @default(0)
-  course    Course @relation(fields: [courseId], references: [id])
+  course    Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId  String
   creator   User   @relation(fields: [creatorId], references: [id])
   creatorId String
@@ -106,7 +106,7 @@ model Chapter {
 
 model Comment {
   id        Int     @id @default(autoincrement())
-  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   text      String
   chapterId Int
   creator   User?   @relation(fields: [creatorId], references: [id])

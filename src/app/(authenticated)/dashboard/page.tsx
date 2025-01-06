@@ -120,9 +120,7 @@ const dashboardPage = async () => {
   // for courses created : course name, numberOfBuyers, createdAt , updatedAt, view, update and delete
   // for courses bougth : course name, numberOfChapters, creator name , mark as complete
   return (
-    <div
-      className={`mb-20 ${userWithCourses?.coursesCreated.length! > 0 && userWithCourses?.coursesBought.length! > 0 ? "mb-40" : ""} mt-20 flex h-screen w-screen items-start justify-center`}
-    >
+    <div className={`my-24 flex w-screen items-start justify-center`}>
       <div className="flex w-[90%] max-w-[900px] flex-col items-center justify-center pb-20 md:ml-8 lg:ml-0">
         <h1 className="my-4 text-4xl font-extrabold text-gray-200">
           Courses created

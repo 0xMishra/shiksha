@@ -41,7 +41,7 @@ async function HomePage() {
 
   if (courses.length > 0) {
     return (
-      <div className="mb-10 flex h-screen w-screen items-start justify-center">
+      <div className="mb-20 mt-2 flex w-screen items-start justify-center">
         <div className="relative top-20 grid w-[90vw] max-w-[1200px] grid-cols-1 place-items-center gap-8 p-4 pb-24 sm:grid-cols-2 md:ml-6 lg:grid-cols-3">
           {courses.map((course) => {
             const {

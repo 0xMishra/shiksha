@@ -28,6 +28,8 @@ export const DeleteCourseActionButton = ({
     }
   }, [state]);
 
+  console.log(courseId);
+
   return (
     <form action={formAction}>
       <Input value={courseId} name="courseId" className="hidden" readOnly />

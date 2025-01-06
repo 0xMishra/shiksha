@@ -69,7 +69,7 @@ export function CreateChapterForm({ courseId }: { courseId: string }) {
 
   return (
     <section
-      className={`${imagePreview || videoUrl ? "my-28" : ""} ${videoUrl && imagePreview ? "my-56" : ""} flex h-screen w-screen items-center justify-center md:ml-8 lg:ml-0`}
+      className={`my-32 flex w-screen items-center justify-center md:ml-8 lg:ml-0`}
     >
       <Card
         className={cn("w-[90%] max-w-[700px] bg-accent")}
