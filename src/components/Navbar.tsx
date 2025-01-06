@@ -17,9 +17,12 @@ export const Navbar = async () => {
     return (
       <div className="fixed top-0 z-[5] flex w-screen items-center justify-center border-b-[2px] border-solid border-gray-800 bg-accent p-3 md:ml-6 lg:ml-0">
         <div className="flex w-[90vw] max-w-[700px] items-center justify-between">
-          <h1 className="bg-gradient-to-b from-blue-400 to-blue-700 bg-clip-text pl-2 pr-1 text-3xl font-black tracking-tighter text-transparent">
+          <Link
+            href={"/"}
+            className="bg-gradient-to-b from-blue-400 to-blue-700 bg-clip-text pl-2 pr-1 text-3xl font-black tracking-tighter text-transparent"
+          >
             Shiksha
-          </h1>
+          </Link>
           <div>
             <Avatar>
               {session?.user.image ? (
@@ -28,11 +31,19 @@ export const Navbar = async () => {
                     <AvatarImage src={session?.user.image} />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                      {session.user.email?.split("@")[0]}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Billing</DropdownMenuItem>
-                    <DropdownMenuItem>Team</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href={"/"}>Browse courses</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href={"/courses/create"}>Create course</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href={"/dashboard"}>Dashboard</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem>
                       <LogoutButton />
                     </DropdownMenuItem>
