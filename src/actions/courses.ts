@@ -1,9 +1,13 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { number } from "zod";
 import { getAuthSession } from "~/server/auth/config";
 import { db } from "~/server/db";
-import { courseCreationSchema } from "~/validators/courseCreationSchema";
+import {
+  courseCreationSchema,
+  courseReviewSchema,
+} from "~/validators/courseCreationSchema";
 
 export const createCourseAction = async (
   prevState: any,
@@ -173,4 +177,49 @@ export const deleteCourseAction = async (
     console.log(error);
   }
   redirect("/dashboard");
+};
+
+export const createCourseReviewAction = async (
+  prevState: any,
+  formData: FormData,
+) => {
+  try {
+    const session = await getAuthSession();
+    if (!session?.user) {
+      return { msg: "error" };
+    }
+
+    const rating = formData.get("rating") as string;
+    const review = formData.get("review") as string;
+    const courseId = formData.get("courseId") as string;
+    const creatorId = formData.get("creatorId") as string;
+
+    const parsedInput = courseReviewSchema.safeParse({
+      rating: parseInt(rating),
+      review,
+    });
+
+    if (!parsedInput.success) {
+      const errorType = parsedInput.error.errors[0]?.path[0];
+      return { msg: errorType };
+    }
+
+    const reviewCreated = await db.courseReview.create({
+      data: {
+        ratings: parseInt(rating),
+        text: review,
+        creatorId,
+        courseId,
+      },
+    });
+
+    if (!reviewCreated) {
+      return { msg: "error" };
+    }
+
+    revalidatePath("/");
+    revalidatePath(`/courses/${courseId}/reviews`);
+  } catch (error) {
+    console.log(error);
+  }
 };

@@ -1,4 +1,4 @@
-import { IndianRupee, NotebookPen, ScanSearch } from "lucide-react";
+import { IndianRupee, NotebookPen, ScanSearch, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
@@ -30,6 +30,8 @@ export const CourseCard = async ({
   totalBuyers,
   totalRevenue,
   numberOfChapters,
+  completedChapters,
+  ratings,
 }: {
   id: string;
   image: string;
@@ -43,8 +45,11 @@ export const CourseCard = async ({
   totalBuyers: number;
   totalRevenue: number;
   numberOfChapters: number;
+  completedChapters: string;
+  ratings: number;
 }) => {
   const session = await getAuthSession();
+  console.log(ratings);
   if (session?.user.id === creatorId) {
     return (
       <div className="h-[360px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
@@ -78,7 +83,7 @@ export const CourseCard = async ({
               href={`/courses/${id}/reviews`}
               className="text-md px-4 text-gray-400 underline"
             >
-              feedback
+              feedbacks
             </Link>
           </div>
           <div>
@@ -103,22 +108,31 @@ export const CourseCard = async ({
           {name.length > 20 ? name.slice(0, 20) + "..." : name}
         </p>
 
-        <div className="mx-4 mb-4 mt-6 flex flex-col items-start justify-center">
-          <CourseCompletionProgress progress={completionPercentage} />
-          <p className="text-md mt-2 pb-2 font-semibold text-gray-500">
+        <div className="mx-4 mb-2 mt-6 flex flex-col items-start justify-center">
+          <div className="flex w-[100%] items-center justify-start">
+            <CourseCompletionProgress progress={completionPercentage} />
+            <div className="pl-4 text-lg text-gray-400">
+              {`${completedChapters}/${numberOfChapters}`}{" "}
+              {numberOfChapters <= 1 ? "chapter" : "chapters"}
+            </div>
+          </div>
+
+          <p className="text-md mb-2 font-semibold text-gray-500">
             {completionPercentage}% completed
           </p>
           <div className="flex w-[100%] items-baseline justify-between">
             <Link href={`courses/${id}`}>
-              <Button variant={"white"} className={cn("mt-5 rounded-[2px]")}>
+              <Button variant={"white"} className={cn("mt-1 rounded-[2px]")}>
                 <ScanSearch />
                 View course
               </Button>
             </Link>
-            <div className="px-4 text-lg text-gray-400">
-              {`${numberOfChapters}`}{" "}
-              {numberOfChapters <= 1 ? "chapter" : "chapters"}
-            </div>
+            <Link
+              href={`/courses/${id}/reviews`}
+              className="text-md px-4 text-gray-400 underline"
+            >
+              write review
+            </Link>
           </div>
           <div>
             <p className="text-3xl font-semibold text-gray-400"></p>
@@ -141,12 +155,23 @@ export const CourseCard = async ({
         {name.length > 20 ? name.slice(0, 20) + "..." : name}
       </p>
       <p className="px-4 pb-2 text-xl font-semibold text-gray-400">{creator}</p>
-      <Link
-        href={`/courses/${id}/reviews`}
-        className="text-md px-4 text-gray-400 underline"
-      >
-        reviews
-      </Link>
+      <div className="flex items-center justify-start px-4">
+        {ratings === 0 ? (
+          <p className="text-md text-gray-400">No reviews yet</p>
+        ) : (
+          <div>
+            {Array.from({ length: ratings }, (_, i) => (
+              <Star key={i} className="text-sm text-white" size={15} />
+            ))}
+            <Link
+              href={`/courses/${id}/reviews`}
+              className="text-md pl-2 text-gray-400 underline"
+            >
+              <p>reviews</p>
+            </Link>
+          </div>
+        )}
+      </div>
 
       <div className="m-4 mt-7 flex items-center justify-between">
         <Dialog>

@@ -22,6 +22,7 @@ const chapterPage = async ({
   const course = await db.course.findUnique({
     where: { id: courseId },
     select: {
+      name: true,
       id: true,
       creatorId: true,
       courseBoughtBy: {
@@ -40,11 +41,12 @@ const chapterPage = async ({
     },
   });
 
-  let isChapterCompletedByUser = course?.chapters[0]?.chapterCompletedBy.find(
-    ({ id }) => id === session.user.id,
-  );
+  let isChapterCompletedByUser: boolean =
+    !!course?.chapters[0]?.chapterCompletedBy.find(
+      ({ id }) => id === session.user.id,
+    );
 
-  const hasBoughtTheCourse = course?.courseBoughtBy.find(
+  const hasBoughtTheCourse: boolean = !!course?.courseBoughtBy.find(
     (buyer) => buyer.id === session.user.id,
   );
 
@@ -53,6 +55,9 @@ const chapterPage = async ({
   }
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
+      <h1 className="mb-10 mt-20 text-2xl font-extrabold text-gray-200 underline sm:text-3xl md:text-4xl lg:text-5xl">
+        {course?.name}
+      </h1>
       <div className="w-[90vw] max-w-4xl items-center justify-center">
         {session.user.id === course?.creatorId && (
           <div className="flex w-[100%] items-center justify-between">

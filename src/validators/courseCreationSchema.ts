@@ -15,3 +15,8 @@ export const chapterCreationSchema = z.object({
 });
 
 export type chapeterCreationType = z.infer<typeof chapterCreationSchema>;
+
+export const courseReviewSchema = z.object({
+  rating: z.number().positive().min(0).max(5),
+  review: z.string().min(1),
+});

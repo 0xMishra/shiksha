@@ -51,30 +51,32 @@ model VerificationToken {
 }
 
 model User {
-  id                String    @id @default(cuid())
+  id                String         @id @default(cuid())
   name              String?
-  email             String?   @unique
+  email             String?        @unique
   emailVerified     DateTime?
   image             String?
   accounts          Account[]
   sessions          Session[]
-  coursesCreated    Course[]  @relation(name: "courses created")
+  coursesCreated    Course[]       @relation(name: "courses created")
   chaptersCompleted Chapter[]
   coursesBought     Course[]
+  reviewsWrote      CourseReview[]
 }
 
 model Course {
-  id             String    @id @default(uuid())
+  id             String         @id @default(uuid())
   name           String
   description    String?
-  price          Int       @default(0)
+  price          Int            @default(0)
   image          String
   chapters       Chapter[]
-  creator        User      @relation(name: "courses created", fields: [creatorId], references: [id])
+  creator        User           @relation(name: "courses created", fields: [creatorId], references: [id])
   creatorId      String
   courseBoughtBy User[]
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  reviews        CourseReview[]
 }
 
 model Chapter {
@@ -88,4 +90,14 @@ model Chapter {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   chapterCompletedBy User[]
+}
+
+model CourseReview {
+  id        String @id @default(uuid())
+  text      String
+  ratings   Int    @default(0)
+  course    Course @relation(fields: [courseId], references: [id])
+  courseId  String
+  creator   User   @relation(fields: [creatorId], references: [id])
+  creatorId String
 }

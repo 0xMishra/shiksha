@@ -1,6 +1,5 @@
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -9,7 +8,7 @@ import {
 export function DashboardChart({ data, text }: { data: string; text: string }) {
   return (
     <Card
-      className="m-2 w-[300px] cursor-pointer hover:bg-[#1d2021] lg:w-[270px]"
+      className="m-2 w-[300px] cursor-pointer hover:bg-[#1d2021] lg:w-[250px]"
       style={{ background: "#171717", color: "white", marginTop: "2rem" }}
     >
       <CardHeader>

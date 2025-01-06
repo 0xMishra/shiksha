@@ -12,6 +12,7 @@ async function HomePage() {
   const courses = await db.course.findMany({
     select: {
       name: true,
+      reviews: { select: { ratings: true } },
       image: true,
       price: true,
       id: true,
@@ -51,13 +52,14 @@ async function HomePage() {
               price,
               creator,
               courseBoughtBy,
+              reviews,
             } = course;
 
             let buyerId = courseBoughtBy.find(
               (buyer) => buyer.id === session.user.id,
             );
 
-            if (buyerId) hasBoughtCourse = true;
+            hasBoughtCourse = !!buyerId;
 
             const totalChapters = course.chapters.length;
 
@@ -68,7 +70,6 @@ async function HomePage() {
             ).length;
 
             const totalBuyers = courseBoughtBy.length;
-            console.log(price);
             const totalRevenue = courseBoughtBy.length * price;
 
             const completionPercentage =
@@ -76,8 +77,19 @@ async function HomePage() {
                 ? (completedChapters / totalChapters) * 100
                 : 100;
 
+            let totalRatings = reviews.length;
+            let sumOfRatings = reviews.reduce(
+              (acc, current) => acc + current.ratings,
+              0,
+            );
+
+            const averageRating =
+              totalRatings > 0 ? Math.floor(sumOfRatings / totalRatings) : 0;
+
             return (
               <CourseCard
+                ratings={averageRating}
+                completedChapters={completedChapters.toString()}
                 numberOfChapters={totalChapters}
                 totalBuyers={totalBuyers}
                 totalRevenue={totalRevenue}
