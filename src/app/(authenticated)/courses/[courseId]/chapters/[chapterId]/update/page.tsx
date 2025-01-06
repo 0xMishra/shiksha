@@ -43,6 +43,7 @@ const chapterUpdatePage = async ({
         chapter={course.chapters[0]!}
         chapterId={chapterId}
         courseId={courseId}
+        courseName={course.name}
       />
     </div>
   );
