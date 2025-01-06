@@ -88,7 +88,7 @@ export function ChapterUpdateForm({
 
   return (
     <section
-      className={`${imagePreview || videoUrl ? "my-28" : ""} ${videoUrl && imagePreview ? "my-56" : ""} flex h-screen w-screen items-center justify-center md:ml-8 lg:ml-0`}
+      className={`${imagePreview || videoUrl ? "my-24" : ""} ${videoUrl && imagePreview ? "my-32" : ""} flex w-screen items-center justify-center md:ml-8 lg:ml-0`}
     >
       <Card
         className={cn("w-[90%] max-w-[700px] bg-accent")}

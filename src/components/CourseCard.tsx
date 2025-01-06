@@ -49,7 +49,6 @@ export const CourseCard = async ({
   ratings: number;
 }) => {
   const session = await getAuthSession();
-  console.log(ratings);
   if (session?.user.id === creatorId) {
     return (
       <div className="h-[360px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
@@ -161,7 +160,7 @@ export const CourseCard = async ({
         ) : (
           <div>
             {Array.from({ length: ratings }, (_, i) => (
-              <Star key={i} className="text-sm text-white" size={15} />
+              <Star key={i} className="text-sm text-white" size={10} />
             ))}
             <Link
               href={`/courses/${id}/reviews`}

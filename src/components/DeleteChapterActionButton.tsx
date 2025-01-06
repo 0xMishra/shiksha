@@ -17,9 +17,9 @@ export function DeleteChapter({ chapterId }: { chapterId: string }) {
         onClick={() => {
           setIsOpen(true);
         }}
-        className="flex w-44 cursor-pointer items-center justify-center rounded-[0.5rem] bg-red-700 p-2 font-semibold text-white hover:bg-red-900"
+        className="transform cursor-pointer rounded-full bg-gradient-to-r from-red-600 via-pink-500 to-red-500 px-5 py-2 text-white shadow-lg transition-all duration-300 hover:scale-105"
       >
-        DELETE CHAPTER
+        DELETE
       </div>
       <AlertDialog
         isOpen={isOpen}

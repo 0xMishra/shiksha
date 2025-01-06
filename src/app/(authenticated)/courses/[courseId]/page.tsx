@@ -50,8 +50,8 @@ const chaptersPage = async ({
 
   if (course && course?.chapters.length > 0) {
     return (
-      <div className="mb-10 mt-20 flex h-screen w-screen flex-col items-center justify-start">
-        <h1 className="mb-10 text-2xl font-extrabold text-gray-200 underline sm:text-3xl md:text-4xl lg:text-5xl">
+      <div className="mb-12 mt-20 flex w-screen flex-col items-center justify-start">
+        <h1 className="mb-3 text-2xl font-extrabold text-gray-200 sm:text-3xl md:text-4xl lg:text-5xl">
           {course.name}
         </h1>
         {session.user.id === course?.creatorId ? (

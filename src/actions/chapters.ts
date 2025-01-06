@@ -1,10 +1,12 @@
 "use server";
-import { Wheat } from "lucide-react";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAuthSession } from "~/server/auth/config";
 import { db } from "~/server/db";
-import { chapterCreationSchema } from "~/validators/courseCreationSchema";
+import {
+  chapterCommentSchema,
+  chapterCreationSchema,
+} from "~/validators/courseCreationSchema";
 
 export const createChapterAction = async (
   prevState: any,
@@ -199,4 +201,47 @@ export const markChapterAsCompleteAction = async ({
     console.log(error);
   }
   redirect(route);
+};
+
+export const createChapterCommentAction = async (
+  prevState: any,
+  formData: FormData,
+) => {
+  try {
+    const session = await getAuthSession();
+    if (!session?.user) {
+      return { msg: "error" };
+    }
+
+    const comment = formData.get("comment") as string;
+    const chapterId = formData.get("chapterId") as string;
+    const courseId = formData.get("courseId") as string;
+    const creatorId = formData.get("creatorId") as string;
+
+    const parsedInput = chapterCommentSchema.safeParse({
+      comment,
+    });
+
+    if (!parsedInput.success) {
+      const errorType = parsedInput.error.errors[0]?.path[0];
+      return { msg: errorType };
+    }
+
+    const commentCreated = await db.comment.create({
+      data: {
+        text: comment,
+        creatorId,
+        chapterId: parseInt(chapterId),
+      },
+    });
+
+    if (!commentCreated) {
+      return { msg: "error" };
+    }
+
+    revalidatePath("/");
+    revalidatePath(`/courses/${courseId}/chapters/${chapterId}`);
+  } catch (error) {
+    console.log(error);
+  }
 };

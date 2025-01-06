@@ -20,3 +20,7 @@ export const courseReviewSchema = z.object({
   rating: z.number().positive().min(0).max(5),
   review: z.string().min(1),
 });
+
+export const chapterCommentSchema = z.object({
+  comment: z.string().trim().min(3),
+});

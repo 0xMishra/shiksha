@@ -19,9 +19,9 @@ export const MarkChapterAsComplete = ({
         setIsLoading(true);
         markChapterAsCompleteAction({ courseId, chapterId });
       }}
-      className="flex w-48 cursor-pointer items-center justify-center rounded-[0.5rem] bg-blue-700 p-2 font-semibold text-white hover:bg-blue-900"
+      className="flex transform cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-green-900 via-green-800 to-green-700 px-5 py-2 text-white shadow-lg transition-all duration-300 hover:scale-105"
     >
-      {isLoading ? <Loader2 className="animate-spin" /> : "MARK AS COMPLETE"}
+      {isLoading ? <Loader2 className="animate-spin" /> : "Mark Complete"}
     </Button>
   );
 };
