@@ -51,7 +51,7 @@ export const CourseCard = async ({
   const session = await getAuthSession();
   if (session?.user.id === creatorId) {
     return (
-      <div className="h-[360px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
+      <div className="h-[370px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
         <Image
           src={image}
           alt="course thumbnail"
@@ -95,7 +95,7 @@ export const CourseCard = async ({
 
   if (hasBoughtCourse) {
     return (
-      <div className="h-[360px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
+      <div className="h-[370px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
         <Image
           src={image}
           alt="course thumbnail"
@@ -142,7 +142,7 @@ export const CourseCard = async ({
   }
 
   return (
-    <div className="h-[360px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
+    <div className="h-[370px] w-[100%] max-w-[600px] rounded-[2px] border-[2px] border-solid border-gray-800 bg-[#171717]">
       <Image
         src={image}
         alt="course thumbnail"
