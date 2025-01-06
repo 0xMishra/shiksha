@@ -19,6 +19,7 @@ const chapterUpdatePage = async ({
     where: { id: courseId },
     select: {
       id: true,
+      name: true,
       creatorId: true,
       chapters: {
         select: {

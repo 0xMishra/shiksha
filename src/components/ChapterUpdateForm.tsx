@@ -31,10 +31,12 @@ export function ChapterUpdateForm({
   courseId,
   chapterId,
   chapter,
+  courseName,
 }: {
   courseId: string;
   chapterId: string;
   chapter: LocalChapter;
+  courseName: string;
 }) {
   const [updateChapterData, setUpdateChapterData] =
     useState<LocalChapter>(chapter);
@@ -95,9 +97,9 @@ export function ChapterUpdateForm({
         style={{ backgroundColor: "#171717" }}
       >
         <CardHeader>
-          <CardTitle className="text-2xl">{chapter.name}</CardTitle>
+          <CardTitle className="text-2xl">{courseName}</CardTitle>
           <CardDescription className="text-lg">
-            Update information about this chapter
+            Update form for chapter: {chapter.name}
           </CardDescription>
         </CardHeader>
         <CardContent>

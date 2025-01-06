@@ -19,6 +19,7 @@ const createChaptersPage = async ({
   const course = await db.course.findUnique({
     where: { id: courseId },
     select: {
+      name: true,
       id: true,
       creatorId: true,
     },
@@ -30,7 +31,7 @@ const createChaptersPage = async ({
 
   return (
     <div>
-      <CreateChapterForm courseId={courseId} />
+      <CreateChapterForm courseId={courseId} courseName={course.name} />
     </div>
   );
 };

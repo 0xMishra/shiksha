@@ -12,6 +12,7 @@ export const createChapterAction = async (
   prevState: any,
   formData: FormData,
 ) => {
+  let route = "/";
   try {
     const session = await getAuthSession();
     if (!session?.user) {
@@ -62,13 +63,14 @@ export const createChapterAction = async (
       return { msg: "error" };
     }
 
+    route = `/courses/${courseId}/`;
     revalidatePath("/");
     revalidatePath("/dashboard");
     revalidatePath(`/courses/${courseId}/`);
   } catch (error) {
     console.log(error);
   }
-  redirect("/");
+  redirect(route);
 };
 
 export const updateChapterAction = async (

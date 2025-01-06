@@ -20,7 +20,13 @@ import { VideoRenderer } from "./VideoRenderer";
 
 const initialState = null;
 
-export function CreateChapterForm({ courseId }: { courseId: string }) {
+export function CreateChapterForm({
+  courseId,
+  courseName,
+}: {
+  courseId: string;
+  courseName: string;
+}) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string>("");
@@ -76,9 +82,9 @@ export function CreateChapterForm({ courseId }: { courseId: string }) {
         style={{ backgroundColor: "#171717" }}
       >
         <CardHeader>
-          <CardTitle className="text-2xl">Create chapter</CardTitle>
+          <CardTitle className="text-2xl">{courseName}</CardTitle>
           <CardDescription className="text-lg">
-            Provide information about this chapter
+            Create a new chapter for this course
           </CardDescription>
         </CardHeader>
         <CardContent>
