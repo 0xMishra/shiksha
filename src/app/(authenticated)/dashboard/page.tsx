@@ -197,7 +197,7 @@ function DefaultComponent({ option }: { option: Option }) {
               Create course
             </Link>
           ) : (
-            <Link href={"/courses"} className="relative z-10">
+            <Link href={"/"} className="relative z-10">
               Browse course
             </Link>
           )}
