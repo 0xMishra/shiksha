@@ -40,7 +40,7 @@ export const ChaptersListSidebar = ({
                   href={`/courses/${chapter.courseId}/chapters/${chapter.id}`}
                   className="block transform cursor-pointer rounded-lg bg-gray-700 p-3 shadow-md transition-all duration-300 hover:scale-105 hover:bg-gradient-to-r hover:from-blue-900 hover:via-blue-800 hover:to-blue-700"
                 >
-                  {chapter.name.slice(0, 15)}
+                  {chapter.name.slice(0, 15)}...
                 </Link>
               </li>
             ))}
